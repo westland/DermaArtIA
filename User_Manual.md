@@ -1,7 +1,7 @@
 # DermaArtIA User Manual: Deploying a Gemini-Based Multi-Agent AI Company
 
 **Deploying OpenClaw and the FastAPI Secure Web Portal on DigitalOcean with Google Gemini 2.5 Flash**  
-*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.8*
+*Copyright © 2026 J. Christopher Westland, all rights reserved · v1.0*
 
 ---
 
@@ -22,6 +22,8 @@
 9. [Bypassing SSL Warnings on Mobile](#9-bypassing-ssl-warnings-on-mobile)
 10. [Troubleshooting](#10-troubleshooting)
 11. [Multimedia & Social Publishing](#11-multimedia--social-publishing)
+12. [Secure Credentials & Integrations System](#12-secure-credentials--integrations-system)
+13. [Gateway Model Fallbacks & Failover](#13-gateway-model-fallbacks--failover)
 
 ---
 
@@ -232,10 +234,64 @@ The agent system is configured with Google's image and video generation APIs:
   ```
 
 ### Automating Social Updates
-Coder has access to two pre-packaged scripts inside the workspace:
-1. **`wordpress_update.py`**: Interacts with your WordPress site to upload media files and inject page/post HTML copy.
-2. **`instagram_post.py`**: Interacts with the Instagram Graph API to post media (via the public link returned by the WordPress script).
+The agent workspaces are equipped with pre-packaged automation scripts under `~/.openclaw/workspace-[agent]/`:
+1. **`wordpress_update.py`**: Uploads media files and publishes pages or blog posts to WordPress.
+2. **`instagram_post.py`**: Publishes photo updates to Instagram Business Accounts via the Instagram Graph API. Note: Instagram strictly requires JPEG (`.jpg`/`.jpeg`) format; agents are instructed to convert PNGs to JPEGs using PIL before posting.
+3. **`facebook_post.py`**: Publishes photo, video, or text updates directly to a Facebook Page Feed.
+4. **`tiktok_post.py`**: Publishes video posts to TikTok Business Accounts using the TikTok Graph API.
+
+#### Reliability Fix: PNG File Uploads
+To prevent upload failures on environments where the operating system fails to guess the correct mime-type for image files (often defaulting to `application/octet-stream` which WordPress rejects), `wordpress_update.py` includes an explicit mime-type override. PNG files (`.png`) are guaranteed to upload with `Content-Type: image/png`, making updates robust and reliable.
 
 ---
-*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.8*
+
+## 12. Secure Credentials & Integrations System
+
+DermaArtIA v1.0 implements a robust, secure mechanism to store external platform credentials and share them selectively with specific agents (Henry, Coder, Scout, Writer, Watcher).
+
+### Managing Integrations via Web Portal
+1. Navigate to the **Integrations & Auth** tab on the side drawer menu.
+2. Enter the credential details for the desired service:
+   * **WordPress**: Username, App Password, Base URL
+   * **Instagram**: Page ID, Access Token
+   * **Facebook**: Page ID, Access Token
+   * **TikTok**: Client Key, Access Token
+   * **Google Business**: Location ID, Access Token
+3. Under the **Allowed Agents** checklist for each card, select which agents are authorized to access these credentials.
+4. Click **Save Credentials**.
+
+### Secure Workspace Synchronization
+* **Database Storage**: All credentials are saved in the portal's `/opt/dermaart-portal/dermaart.db` database inside the `credentials` table. Sensitive inputs (tokens, passwords) are masked (`●●●●●●●●●●`) in the web interface and are preserved when other settings are saved.
+* **Workspace Wiping/Syncing**: When credentials are saved, the FastAPI backend automatically writes a localized JSON file named `publishing_credentials.json` directly into the permitted agents' workspaces:
+  `/home/clawuser/.openclaw/workspace-[agent_id]/publishing_credentials.json`
+* **Security & Permissions**: The credentials file is written with strict UNIX permissions `600` (readable/writable only by the owner) and owned by the `clawuser` user. If an agent's access is unchecked/revoked in the portal, the credentials file is immediately deleted/cleaned from their workspace.
+* **Script Integration**: The publishing scripts (`wordpress_update.py`, `instagram_post.py`, etc.) automatically detect and load credentials from `publishing_credentials.json` if command-line API parameters are omitted.
+
+---
+
+## 13. Gateway Model Fallbacks & Failover
+
+To handle API exhaustion errors (`RESOURCE_EXHAUSTED` / HTTP 429) during high-frequency tasks (like the 5-minute health check), OpenClaw v1.0 is configured with an automatic model failover system in `/home/clawuser/.openclaw/openclaw.json`.
+
+### Fallback Chain Configuration
+Under both global defaults (`agents.defaults.model`) and individual agent definitions, the primary model is configured alongside a chain of alternative lite models:
+```json
+"model": {
+  "primary": "google/gemini-2.5-flash",
+  "fallbacks": [
+    "google/gemini-2.5-flash-lite",
+    "google/gemini-3.1-flash-lite"
+  ]
+}
+```
+
+### How Failover Operates
+1. If an agent executes a turn and the primary model (`google/gemini-2.5-flash`) fails with a rate limit error (429), OpenClaw catches the exception.
+2. It automatically shifts execution to the next fallback candidate (`google/gemini-2.5-flash-lite`).
+3. If that candidate fails or times out, it moves to `google/gemini-3.1-flash-lite`.
+4. When a fallback succeeds, the session completes cleanly, updating the cron job database status to `ok` and logging the recovery events in `/home/clawuser/.openclaw/logs/openclaw.log`.
+
+---
+*Copyright © 2026 J. Christopher Westland, all rights reserved · v1.0*
+
 

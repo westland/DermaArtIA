@@ -24,6 +24,10 @@ document.querySelectorAll(".nav-item").forEach(button => {
         
         // Header title updates
         updateHeaderInfo(targetTab);
+        
+        if (targetTab === "tab-credentials") {
+            loadCredentials();
+        }
 
         // Auto-close sidebar overlay on mobile when switching tabs
         document.querySelector(".app-container").classList.remove("sidebar-active");
@@ -51,6 +55,10 @@ function updateHeaderInfo(tabId) {
         case "tab-system":
             pageTitle.innerText = "System Status";
             pageDesc.innerText = "Hardware resources and process health metrics of your server.";
+            break;
+        case "tab-credentials":
+            pageTitle.innerText = "Integrations & Auth";
+            pageDesc.innerText = "Configure and manage credentials shared with specific AI agents.";
             break;
     }
 }
@@ -817,6 +825,133 @@ if (voiceBtn && cmdInput) {
             alert("Speech recognition is not supported in this browser. Please use Google Chrome, Apple Safari, or Microsoft Edge.");
         });
     }
+}
+
+// --- Credentials & Integrations Management ---
+async function loadCredentials() {
+    try {
+        const res = await fetch("/api/credentials");
+        if (!res.ok) throw new Error("Failed to load integrations");
+        const data = await res.json();
+        
+        // WordPress
+        document.getElementById("wp_url").value = data.wordpress.values.wp_url || "";
+        document.getElementById("wp_username").value = data.wordpress.values.wp_username || "";
+        document.getElementById("wp_password").value = data.wordpress.values.wp_password || "";
+        setCheckboxValues("wp_agents", data.wordpress.allowed_agents);
+        
+        // Instagram
+        document.getElementById("ig_account_id").value = data.instagram.values.ig_account_id || "";
+        document.getElementById("ig_access_token").value = data.instagram.values.ig_access_token || "";
+        setCheckboxValues("ig_agents", data.instagram.allowed_agents);
+        
+        // Facebook
+        document.getElementById("fb_page_id").value = data.facebook.values.fb_page_id || "";
+        document.getElementById("fb_access_token").value = data.facebook.values.fb_access_token || "";
+        setCheckboxValues("fb_agents", data.facebook.allowed_agents);
+        
+        // TikTok
+        document.getElementById("tiktok_access_token").value = data.tiktok.values.tiktok_access_token || "";
+        setCheckboxValues("tiktok_agents", data.tiktok.allowed_agents);
+        
+        // Google Business Profile
+        document.getElementById("gb_account_id").value = data.google_business.values.gb_account_id || "";
+        document.getElementById("gb_location_id").value = data.google_business.values.gb_location_id || "";
+        document.getElementById("gb_client_id").value = data.google_business.values.gb_client_id || "";
+        document.getElementById("gb_client_secret").value = data.google_business.values.gb_client_secret || "";
+        document.getElementById("gb_refresh_token").value = data.google_business.values.gb_refresh_token || "";
+        setCheckboxValues("gb_agents", data.google_business.allowed_agents);
+        
+    } catch (e) {
+        console.error("Failed to load credentials", e);
+    }
+}
+
+function setCheckboxValues(name, allowedAgents) {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(checkbox => {
+        checkbox.checked = allowedAgents.includes(checkbox.value);
+    });
+}
+
+function getCheckboxValues(name) {
+    const checked = [];
+    document.querySelectorAll(`input[name="${name}"]:checked`).forEach(checkbox => {
+        checked.push(checkbox.value);
+    });
+    return checked;
+}
+
+const credentialsForm = document.getElementById("credentials-form");
+if (credentialsForm) {
+    credentialsForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        
+        const saveStatus = document.getElementById("credentials-save-status");
+        saveStatus.className = "save-status-msg";
+        saveStatus.innerText = "Saving integrations...";
+        
+        const payload = {
+            wordpress: {
+                values: {
+                    wp_url: document.getElementById("wp_url").value.trim(),
+                    wp_username: document.getElementById("wp_username").value.trim(),
+                    wp_password: document.getElementById("wp_password").value
+                },
+                allowed_agents: getCheckboxValues("wp_agents")
+            },
+            instagram: {
+                values: {
+                    ig_account_id: document.getElementById("ig_account_id").value.trim(),
+                    ig_access_token: document.getElementById("ig_access_token").value
+                },
+                allowed_agents: getCheckboxValues("ig_agents")
+            },
+            facebook: {
+                values: {
+                    fb_page_id: document.getElementById("fb_page_id").value.trim(),
+                    fb_access_token: document.getElementById("fb_access_token").value
+                },
+                allowed_agents: getCheckboxValues("fb_agents")
+            },
+            tiktok: {
+                values: {
+                    tiktok_access_token: document.getElementById("tiktok_access_token").value
+                },
+                allowed_agents: getCheckboxValues("tiktok_agents")
+            },
+            google_business: {
+                values: {
+                    gb_account_id: document.getElementById("gb_account_id").value.trim(),
+                    gb_location_id: document.getElementById("gb_location_id").value.trim(),
+                    gb_client_id: document.getElementById("gb_client_id").value,
+                    gb_client_secret: document.getElementById("gb_client_secret").value,
+                    gb_refresh_token: document.getElementById("gb_refresh_token").value
+                },
+                allowed_agents: getCheckboxValues("gb_agents")
+            }
+        };
+        
+        try {
+            const res = await fetch("/api/credentials", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            
+            if (res.ok) {
+                saveStatus.className = "save-status-msg success";
+                saveStatus.innerHTML = '<i class="fa-solid fa-circle-check"></i> Saved successfully!';
+                setTimeout(loadCredentials, 1000);
+            } else {
+                const err = await res.json();
+                saveStatus.className = "save-status-msg error";
+                saveStatus.innerText = "Error: " + (err.detail || "Failed to save");
+            }
+        } catch (err) {
+            saveStatus.className = "save-status-msg error";
+            saveStatus.innerText = "Connection error: " + err.message;
+        }
+    });
 }
 
 // --- App Bootstrap ---

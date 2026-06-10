@@ -33,8 +33,22 @@ def main():
     wp_pass = args.password or os.environ.get("WP_PASSWORD")
     
     if not (wp_url and wp_user and wp_pass):
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        creds_path = os.path.join(script_dir, "publishing_credentials.json")
+        if os.path.exists(creds_path):
+            try:
+                with open(creds_path, "r", encoding="utf-8") as f:
+                    creds = json.load(f)
+                    wp_creds = creds.get("wordpress", {})
+                    wp_url = wp_url or wp_creds.get("wp_url")
+                    wp_user = wp_user or wp_creds.get("wp_username")
+                    wp_pass = wp_pass or wp_creds.get("wp_password")
+            except Exception as e:
+                print(f"Warning: Failed to load credentials from {creds_path}: {e}", file=sys.stderr)
+                
+    if not (wp_url and wp_user and wp_pass):
         print("ERROR: WordPress URL, Username, and Password are required.", file=sys.stderr)
-        print("Provide them via arguments or environment variables (WP_URL, WP_USERNAME, WP_PASSWORD).", file=sys.stderr)
+        print("Provide them via arguments, environment variables, or save them in the portal Integrations page.", file=sys.stderr)
         sys.exit(1)
         
     # Standardize URL
@@ -53,6 +67,22 @@ def main():
             
         filename = os.path.basename(args.file)
         mime_type, _ = mimetypes.guess_type(args.file)
+        
+        # Explicit override mapping for common formats to ensure reliability (e.g. PNG files)
+        ext = os.path.splitext(filename)[1].lower()
+        if ext == ".png":
+            mime_type = "image/png"
+        elif ext in [".jpg", ".jpeg"]:
+            mime_type = "image/jpeg"
+        elif ext == ".gif":
+            mime_type = "image/gif"
+        elif ext == ".webp":
+            mime_type = "image/webp"
+        elif ext == ".mp4":
+            mime_type = "video/mp4"
+        elif ext in [".mov", ".avi", ".webm"]:
+            mime_type = f"video/{ext[1:]}"
+            
         if not mime_type:
             mime_type = "application/octet-stream"
             

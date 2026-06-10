@@ -28,6 +28,20 @@ def main():
     
     access_token = args.access_token or os.environ.get("IG_ACCESS_TOKEN")
     instagram_id = args.instagram_id or os.environ.get("IG_ACCOUNT_ID")
+    
+    if not (access_token and instagram_id):
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        creds_path = os.path.join(script_dir, "publishing_credentials.json")
+        if os.path.exists(creds_path):
+            try:
+                with open(creds_path, "r", encoding="utf-8") as f:
+                    creds = json.load(f)
+                    ig_creds = creds.get("instagram", {})
+                    access_token = access_token or ig_creds.get("ig_access_token")
+                    instagram_id = instagram_id or ig_creds.get("ig_account_id")
+            except Exception as e:
+                print(f"Warning: Failed to load credentials from {creds_path}: {e}", file=sys.stderr)
+                
     media_url = args.media_url
     caption = args.caption
     
@@ -42,7 +56,7 @@ def main():
         
     if not (access_token and instagram_id and media_url):
         print("ERROR: Access Token, Instagram ID, and Media URL are required.", file=sys.stderr)
-        print("Provide them via arguments or environment variables (IG_ACCESS_TOKEN, IG_ACCOUNT_ID).", file=sys.stderr)
+        print("Provide them via arguments, environment variables, or save them in the portal Integrations page.", file=sys.stderr)
         print("\nNote: Instagram API requires files to be hosted on a public URL.", file=sys.stderr)
         print("Tip: Upload the file to WordPress first, then use the returned URL.", file=sys.stderr)
         sys.exit(1)

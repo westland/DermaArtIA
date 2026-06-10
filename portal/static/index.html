@@ -45,6 +45,9 @@
                 <button class="nav-item" data-tab="tab-system">
                     <i class="fa-solid fa-server"></i> System Status
                 </button>
+                <button class="nav-item" data-tab="tab-credentials">
+                    <i class="fa-solid fa-key"></i> Integrations & Auth
+                </button>
             </nav>
             
             <div class="provider-badge">
@@ -271,6 +274,222 @@
                             </table>
                         </div>
                     </div>
+                </section>
+
+                <!-- Tab 6: Integrations & Auth -->
+                <section id="tab-credentials" class="tab-pane">
+                    <form id="credentials-form">
+                        <div class="credentials-grid">
+                            <!-- WordPress Credentials Card -->
+                            <div class="credentials-card card">
+                                <h3><i class="fa-brands fa-wordpress text-cyan"></i> WordPress Integration</h3>
+                                <div class="credentials-form-group">
+                                    <label for="wp_url">WordPress Site URL</label>
+                                    <input type="url" id="wp_url" placeholder="https://yourmedspa.com" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="wp_username">Username / Email</label>
+                                    <input type="text" id="wp_username" placeholder="admin" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="wp_password">Application Password</label>
+                                    <input type="password" id="wp_password" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-sharing-sec">
+                                    <span class="sharing-lbl">Share access with agents:</span>
+                                    <div class="sharing-agents-grid">
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="wp_agents" value="henry">
+                                            <span>Henry</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="wp_agents" value="coder">
+                                            <span>Coder</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="wp_agents" value="scout">
+                                            <span>Scout</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="wp_agents" value="writer">
+                                            <span>Writer</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="wp_agents" value="watcher">
+                                            <span>Watcher</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Instagram Credentials Card -->
+                            <div class="credentials-card card">
+                                <h3><i class="fa-brands fa-instagram text-purple"></i> Instagram Integration</h3>
+                                <div class="credentials-form-group">
+                                    <label for="ig_account_id">Instagram Business Account ID</label>
+                                    <input type="text" id="ig_account_id" placeholder="178414xxxxxxxxxxx" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="ig_access_token">Page Access Token</label>
+                                    <input type="password" id="ig_access_token" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-sharing-sec">
+                                    <span class="sharing-lbl">Share access with agents:</span>
+                                    <div class="sharing-agents-grid">
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="ig_agents" value="henry">
+                                            <span>Henry</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="ig_agents" value="coder">
+                                            <span>Coder</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="ig_agents" value="scout">
+                                            <span>Scout</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="ig_agents" value="writer">
+                                            <span>Writer</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="ig_agents" value="watcher">
+                                            <span>Watcher</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Facebook Credentials Card -->
+                            <div class="credentials-card card">
+                                <h3><i class="fa-brands fa-facebook text-cyan"></i> Facebook Integration</h3>
+                                <div class="credentials-form-group">
+                                    <label for="fb_page_id">Facebook Page ID</label>
+                                    <input type="text" id="fb_page_id" placeholder="102xxxxxxxxxxxx" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="fb_access_token">Page Access Token</label>
+                                    <input type="password" id="fb_access_token" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-sharing-sec">
+                                    <span class="sharing-lbl">Share access with agents:</span>
+                                    <div class="sharing-agents-grid">
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="fb_agents" value="henry">
+                                            <span>Henry</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="fb_agents" value="coder">
+                                            <span>Coder</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="fb_agents" value="scout">
+                                            <span>Scout</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="fb_agents" value="writer">
+                                            <span>Writer</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="fb_agents" value="watcher">
+                                            <span>Watcher</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TikTok Credentials Card -->
+                            <div class="credentials-card card">
+                                <h3><i class="fa-brands fa-tiktok text-primary"></i> TikTok Integration</h3>
+                                <div class="credentials-form-group">
+                                    <label for="tiktok_access_token">TikTok Creator Access Token</label>
+                                    <input type="password" id="tiktok_access_token" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-sharing-sec">
+                                    <span class="sharing-lbl">Share access with agents:</span>
+                                    <div class="sharing-agents-grid">
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="tiktok_agents" value="henry">
+                                            <span>Henry</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="tiktok_agents" value="coder">
+                                            <span>Coder</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="tiktok_agents" value="scout">
+                                            <span>Scout</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="tiktok_agents" value="writer">
+                                            <span>Writer</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="tiktok_agents" value="watcher">
+                                            <span>Watcher</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Google Business Profile Credentials Card -->
+                            <div class="credentials-card card">
+                                <h3><i class="fa-brands fa-google text-cyan"></i> Google Business Profile</h3>
+                                <div class="credentials-form-group">
+                                    <label for="gb_account_id">Google Account ID</label>
+                                    <input type="text" id="gb_account_id" placeholder="105xxxxxxxxxxxxxxxxxx" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="gb_location_id">Google Location ID</label>
+                                    <input type="text" id="gb_location_id" placeholder="locations/12345xxxxxxxxxxx" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="gb_client_id">OAuth Client ID</label>
+                                    <input type="password" id="gb_client_id" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="gb_client_secret">OAuth Client Secret</label>
+                                    <input type="password" id="gb_client_secret" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-form-group">
+                                    <label for="gb_refresh_token">OAuth Refresh Token</label>
+                                    <input type="password" id="gb_refresh_token" placeholder="●●●●●●●●●●" autocomplete="off">
+                                </div>
+                                <div class="credentials-sharing-sec">
+                                    <span class="sharing-lbl">Share access with agents:</span>
+                                    <div class="sharing-agents-grid">
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="gb_agents" value="henry">
+                                            <span>Henry</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="gb_agents" value="coder">
+                                            <span>Coder</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="gb_agents" value="scout">
+                                            <span>Scout</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="gb_agents" value="writer">
+                                            <span>Writer</span>
+                                        </label>
+                                        <label class="sharing-agent-chip">
+                                            <input type="checkbox" name="gb_agents" value="watcher">
+                                            <span>Watcher</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="credentials-actions-bar">
+                            <span id="credentials-save-status" class="save-status-msg"></span>
+                            <button type="submit" class="btn btn-primary btn-save-all">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Integrations & Permissions
+                            </button>
+                        </div>
+                    </form>
                 </section>
 
             </div>

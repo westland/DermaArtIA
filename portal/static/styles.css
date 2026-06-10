@@ -1535,3 +1535,134 @@ body {
     font-family: var(--font-mono);
 }
 
+/* --- Tab 6: Credentials Manager --- */
+.credentials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.credentials-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.credentials-card h3 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.credentials-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.credentials-form-group label {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.credentials-form-group input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text-primary);
+    font-family: var(--font-outfit);
+    font-size: 0.9em;
+    outline: none;
+    transition: border-color var(--transition-speed) ease;
+}
+
+.credentials-form-group input:focus {
+    border-color: var(--accent-blue);
+}
+
+.credentials-sharing-sec {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.01);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.sharing-lbl {
+    font-size: 0.82em;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.sharing-agents-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sharing-agent-chip {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    user-select: none;
+    transition: all var(--transition-speed) ease;
+}
+
+.sharing-agent-chip input[type="checkbox"] {
+    display: none;
+}
+
+.sharing-agent-chip:has(input[type="checkbox"]:checked) {
+    background: rgba(88, 166, 255, 0.1);
+    color: var(--accent-blue);
+    border-color: rgba(88, 166, 255, 0.25);
+}
+
+.credentials-actions-bar {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.save-status-msg {
+    font-size: 0.88em;
+    font-weight: 500;
+}
+
+.save-status-msg.success {
+    color: var(--accent-teal);
+}
+
+.save-status-msg.error {
+    color: var(--accent-red);
+}
+
+.btn-save-all {
+    padding: 12px 24px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+

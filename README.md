@@ -3,7 +3,7 @@
 **A deployable five-agent autonomous AI company for marketing analytics, research, and automation in the aesthetics sector.**  
 *Copyright © 2026 J. Christopher Westland, all rights reserved*
 
-[![Release](https://img.shields.io/badge/release-v0.8-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v0.8)
+[![Release](https://img.shields.io/badge/release-v1.0-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v1.0)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-2026.4.26-blue)](https://openclaw.dev)
 [![Platform](https://img.shields.io/badge/platform-Ubuntu%2024.04-orange)](https://ubuntu.com)
 [![Interface](https://img.shields.io/badge/interface-FastAPI_Web_Portal-purple)](https://fastapi.tiangolo.com)
@@ -18,9 +18,10 @@ DermaArtIA is a multi-agent AI company running 24/7 on a secure cloud server, de
 1. **Interactive Command Center**: Chat with Henry (Chief of Staff) using text or **voice dictation** via browser-native SpeechRecognition.
 2. **Mobile Collapsible Sidebar**: Fully responsive mobile/tablet layout with a slide-out drawer menu and stacked dashboards.
 3. **Automated Jobs Center**: Live scheduler displaying cron run history, last run statuses (e.g. `ok`, `error`), and a "Run Now" trigger button pulling directly from the active SQLite database.
-4. **Reports & Briefings Viewer**: A clean Markdown reader where Scout, Writer, and Watcher submit automated memos and research briefings.
-5. **Interactive Media Uploads & Workspace File Manager**: Upload images or videos using a drag-and-drop zone or chat attachments to put assets directly in the agent's workspace.
-6. **Social Publishing & Generative AI Hub**: Leverage Google Imagen and Veo to generate and modify photos and videos, and execute Coder scripts to update WordPress pages and publish posts on Instagram.
+4. **Integrations & Auth Control Panel**: Securely store credential packages for external platforms (WordPress, Instagram, Facebook, TikTok, Google Business Profile) in the backend SQLite database, and configure fine-grained sharing lists. Credentials are automatically synchronized to permitted agents' workspaces as encrypted/permissioned files, and automatically revoked/wiped when access is turned off.
+5. **Reports & Briefings Viewer**: A clean Markdown reader where Scout, Writer, and Watcher submit automated memos and research briefings.
+6. **Interactive Media Uploads & Workspace File Manager**: Upload images or videos using a drag-and-drop zone or chat attachments to put assets directly in the agent's workspace.
+7. **Social Publishing & Generative AI Hub**: Leverage Google Imagen and Veo to generate and modify photos and videos, and execute Coder scripts to update WordPress pages and publish posts on Instagram, Facebook, and TikTok.
 
 The five agents are:
 
@@ -46,25 +47,25 @@ The five agents are:
                       │      Nginx Reverse Proxy     │ (Basic Auth + Self-Signed SSL)
                       └──────┬────────────────┬──────┘
                 Static Files │                │ API Proxy
-                             ▼                ▼
-      ┌──────────────────────────┐    ┌──────────────────────────┐
-      │   Frontend Dashboard     │    │   FastAPI Web Portal     │
-      │  (Mobile Responsive JS)  │    │      (Port 8000)         │
-      └──────────────────────────┘    └──────┬───────────┬───────┘
-                                             │           │ SQLite
-                                             │ REST API  ▼
-                                             │ (18789) ┌─────────────────┐
-                                             │         │   Database      │
-                                             ▼         │ (dermaart.db)   │
-                                      ┌────────────┐   └─────────────────┘
-                                      │  OpenClaw  │
-                                      │  Gateway   │
-                                      └──────┬─────┘
-                                             │
-                                             ▼
-                                  ┌────────────────────┐
-                                  │  Google Gemini API │ (Gemini 2.5 Flash)
-                                  └────────────────────┘
+                                     ▼                ▼
+       ┌──────────────────────────┐    ┌──────────────────────────┐
+       │   Frontend Dashboard     │    │   FastAPI Web Portal     │
+       │  (Mobile Responsive JS)  │    │      (Port 8000)         │
+       └──────────────────────────┘    └──────┬───────────┬───────┘
+                                              │           │ SQLite
+                                              │ REST API  ▼
+                                              │ (18789) ┌─────────────────┐
+                                              │         │   Database      │
+                                              ▼         │ (dermaart.db)   │
+                                       ┌────────────┐   └─────────────────┘
+                                       │  OpenClaw  │
+                                       │  Gateway   │
+                                       └──────┬─────┘
+                                              │
+                                              ▼
+                                   ┌────────────────────┐
+                                   │  Google Gemini API │ (Gemini 2.5 Flash)
+                                   └────────────────────┘
 ```
 
 ---

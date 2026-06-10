@@ -44,6 +44,14 @@ def init_db():
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS credentials (
+        service TEXT PRIMARY KEY,
+        values_json TEXT,
+        allowed_agents TEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
     conn.commit()
     conn.close()
 
@@ -442,6 +450,146 @@ def download_generated_media(filepath: str):
     if not os.path.exists(filepath):
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(filepath)
+
+# Pydantic models for credentials sharing
+class ServiceCredentials(BaseModel):
+    values: dict
+    allowed_agents: list[str]
+
+class CredentialsSaveRequest(BaseModel):
+    wordpress: ServiceCredentials
+    instagram: ServiceCredentials
+    facebook: ServiceCredentials
+    tiktok: ServiceCredentials
+    google_business: ServiceCredentials
+
+# Synchronize credentials to agent workspaces
+def sync_agent_credentials():
+    agents = ["henry", "coder", "scout", "writer", "watcher"]
+    
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT service, values_json, allowed_agents FROM credentials")
+    rows = cursor.fetchall()
+    conn.close()
+    
+    agent_creds = {a: {} for a in agents}
+    for service, values_json, allowed_agents_str in rows:
+        try:
+            values = json.loads(values_json)
+        except Exception:
+            values = {}
+            
+        allowed = [x.strip() for x in allowed_agents_str.split(",") if x.strip()]
+        for a in agents:
+            if a in allowed:
+                agent_creds[a][service] = values
+                
+    for a in agents:
+        agent_workspace = os.path.join(OPENCLAW_HOME, f"workspace-{a}")
+        creds_file_path = os.path.join(agent_workspace, "publishing_credentials.json")
+        
+        # Write to workspace if workspace exists
+        if os.path.exists(agent_workspace):
+            try:
+                with open(creds_file_path, "w", encoding="utf-8") as f:
+                    json.dump(agent_creds[a], f, indent=2)
+                
+                # set permissions on Linux
+                if os.name != "nt" and os.getuid() == 0:
+                    try:
+                        import pwd
+                        pw = pwd.getpwnam("clawuser")
+                        os.chown(creds_file_path, pw.pw_uid, pw.pw_gid)
+                        os.chmod(creds_file_path, 0o600)
+                    except Exception:
+                        subprocess.run(["chown", "clawuser:clawuser", creds_file_path])
+                        subprocess.run(["chmod", "600", creds_file_path])
+            except Exception as e:
+                print(f"Error syncing credentials for agent {a}: {e}")
+
+@app.get("/api/credentials")
+def get_credentials():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT service, values_json, allowed_agents FROM credentials")
+    rows = cursor.fetchall()
+    conn.close()
+    
+    result = {
+        "wordpress": {"values": {}, "allowed_agents": []},
+        "instagram": {"values": {}, "allowed_agents": []},
+        "facebook": {"values": {}, "allowed_agents": []},
+        "tiktok": {"values": {}, "allowed_agents": []},
+        "google_business": {"values": {}, "allowed_agents": []}
+    }
+    
+    for service, values_json, allowed_agents_str in rows:
+        if service in result:
+            try:
+                values = json.loads(values_json)
+            except Exception:
+                values = {}
+            
+            # Mask sensitive values
+            masked_values = {}
+            for k, v in values.items():
+                if any(x in k.lower() for x in ["password", "token", "secret", "access"]):
+                    masked_values[k] = "●●●●●●●●●●" if v else ""
+                else:
+                    masked_values[k] = v
+            
+            allowed = [x.strip() for x in allowed_agents_str.split(",") if x.strip()]
+            result[service] = {
+                "values": masked_values,
+                "allowed_agents": allowed
+            }
+    return result
+
+@app.post("/api/credentials")
+def save_credentials(req: CredentialsSaveRequest):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    
+    services = ["wordpress", "instagram", "facebook", "tiktok", "google_business"]
+    for service in services:
+        service_data = getattr(req, service)
+        
+        cursor.execute("SELECT values_json FROM credentials WHERE service = ?", (service,))
+        row = cursor.fetchone()
+        existing_values = {}
+        if row:
+            try:
+                existing_values = json.loads(row[0])
+            except Exception:
+                pass
+                
+        resolved_values = {}
+        for k, v in service_data.values.items():
+            if v == "●●●●●●●●●●":
+                resolved_values[k] = existing_values.get(k, "")
+            else:
+                resolved_values[k] = v
+                
+        values_json = json.dumps(resolved_values)
+        allowed_agents_str = ",".join(service_data.allowed_agents)
+        
+        cursor.execute("""
+        INSERT INTO credentials (service, values_json, allowed_agents, updated_at)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(service) DO UPDATE SET
+            values_json = excluded.values_json,
+            allowed_agents = excluded.allowed_agents,
+            updated_at = CURRENT_TIMESTAMP
+        """, (service, values_json, allowed_agents_str))
+        
+    conn.commit()
+    conn.close()
+    
+    # Sync credentials files across workspaces
+    sync_agent_credentials()
+    
+    return {"status": "success"}
 
 # Mount static folder
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")

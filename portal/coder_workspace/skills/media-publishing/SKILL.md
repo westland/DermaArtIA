@@ -86,3 +86,55 @@ python instagram_post.py --is-video --media-url "https://wp-site.com/uploads/int
 ```
 
 *Note: The script reads environment variables `IG_ACCESS_TOKEN` and `IG_ACCOUNT_ID` or accepts arguments. To test code connections without submitting to Instagram, use the `--dry-run` flag.*
+*Warning: The Instagram API strictly requires images to be in JPEG format (PNG images will fail to post). If you have a PNG image in memory, you MUST convert it to JPEG using Python's PIL library (e.g. `Image.open('img.png').convert('RGB').save('img.jpg')`) before uploading it to WordPress and publishing to Instagram.*
+
+---
+
+## Part 4: Facebook Publishing
+
+Use `facebook_post.py` to publish messages, images, and videos to the Facebook Page feed. Like Instagram, you can use WordPress-hosted URLs, or upload a local file directly.
+
+### 1. Publish text post
+```bash
+python facebook_post.py --caption "Schedule direct with Sumar Kasik, RN at Derma Art MedSpa. Experience boutique beauty. ✨"
+```
+
+### 2. Publish photo (local file or URL)
+```bash
+python facebook_post.py --file "skin_smooth.jpg" --caption "Beautiful Scottsdale MedSpa treatments."
+# Or using URL
+python facebook_post.py --media-url "https://wp-site.com/uploads/skin_smooth.jpg" --caption "Beautiful Scottsdale MedSpa treatments."
+```
+
+### 3. Publish video
+Add the `--is-video` flag:
+```bash
+python facebook_post.py --is-video --file "interior_pan.mp4" --caption "Take a virtual tour of our boutique MedSpa."
+```
+
+*Note: The script reads environment variables `FB_ACCESS_TOKEN` and `FB_PAGE_ID` or accepts arguments. It supports testing via `--dry-run`.*
+
+---
+
+## Part 5: TikTok Publishing
+
+Use `tiktok_post.py` to publish video posts to the TikTok account. TikTok requires video files to be hosted on a public URL so it can pull the media.
+
+### Publish Video
+```bash
+# Upload the video to WordPress first to obtain the URL, then run:
+python tiktok_post.py --media-url "https://wp-site.com/uploads/interior_pan.mp4" --caption "Boutique MedSpa vibes in Scottsdale. ✨ #scottsdalemedspa #medspa"
+```
+
+*Note: The script reads environment variables `TIKTOK_ACCESS_TOKEN` or accepts arguments. It supports testing via `--dry-run`.*
+
+---
+
+## Part 6: Credentials & Sharing Permissions
+
+All publishing scripts automatically load the required credentials from `publishing_credentials.json` inside your local workspace. 
+
+- You do NOT need to specify access tokens, usernames, passwords, or account IDs as arguments when calling these scripts, unless you wish to override them.
+- If you run a script and receive a "missing credentials" or "access denied" error, it means the user has not shared the credentials for that platform with you yet in the portal's **Integrations & Auth** dashboard tab. In this case, report the issue to the user.
+- Always use the `--dry-run` flag if you want to verify your command parameters and caption text formatting without executing the actual remote publishing API calls.
+

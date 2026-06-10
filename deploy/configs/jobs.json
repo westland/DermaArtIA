@@ -10,7 +10,7 @@
       "schedule": { "kind": "cron", "expr": "*/5 * * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your health-check skill now. Check system resources (CPU, RAM, disk, swap), verify the OpenClaw gateway is running, check if Nginx and the FastAPI dermaart-portal are active, and review recent error logs. If any metrics exceed warning thresholds, post an alert to the portal using your discord-report skill. Otherwise log the check quietly in your workspace."
+        "message": "Run your health-check skill now. Check system resources (CPU, RAM, disk, swap), verify the OpenClaw gateway is running, check if Nginx and the FastAPI dermaart-portal are active, and review recent error logs. If any metrics exceed warning thresholds, post an alert to the portal using your discord-report skill. Otherwise log the check quietly in your workspace. IMPORTANT: Do not call the update_goal tool as this is an automated system task."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -70,7 +70,7 @@
       "schedule": { "kind": "cron", "expr": "0 23 * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your rnd-meeting skill. Review today's memo from Writer, competitor research from Scout, and coding deliverables from Coder. Analyze gaps in Derma Art's branding, site responsiveness, or patient outreach. Formulate strategic recommendations for Sumar Kasik, RN. Post the retrospective summary using your discord-report skill."
+        "message": "Run your rnd-meeting skill. Review today's memo from Writer, competitor research from Scout, and coding deliverables from Coder. Analyze gaps in Derma Art's branding, site responsiveness, or patient outreach. Formulate strategic recommendations for Sumar Kasik, RN. Post the retrospective summary using your discord-report skill. IMPORTANT: Do not call the update_goal tool as this is an automated system task."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
