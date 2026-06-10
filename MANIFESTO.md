@@ -1,6 +1,6 @@
 # The DermaArtIA Educational Manifesto: Architecting Agency in the Era of Autonomous Aesthetics
 
-*J. Christopher Westland · University of Illinois at Chicago*
+*J. Christopher Westland*
 
 ---
 
@@ -67,4 +67,4 @@ These agents do not just automate; they innovate and negotiate. They operate 24/
 
 ---
 
-*MKT/IDS 518 · University of Illinois at Chicago · Course materials © J. Christopher Westland*
+*Materials © J. Christopher Westland*
