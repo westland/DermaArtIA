@@ -1,6 +1,6 @@
 # The DermaArtIA Manifesto: Architecting Agency in the Era of Autonomous Aesthetics
 
-*Copyright © J. Christopher Westland*
+*Copyright © 2026 J. Christopher Westland, all rights reserved*
 
 ---
 
@@ -49,4 +49,4 @@ These agents do not just automate; they innovate and negotiate. They operate 24/
 
 ---
 
-*Copyright © J. Christopher Westland*
+*Copyright © 2026 J. Christopher Westland, all rights reserved*

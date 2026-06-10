@@ -1,7 +1,7 @@
 # DermaArtIA — Google Gemini-Based Multi-Agent AI Company
 
 **A deployable five-agent autonomous AI company for marketing analytics, research, and automation in the aesthetics sector.**  
-*Copyright © J. Christopher Westland*
+*Copyright © 2026 J. Christopher Westland, all rights reserved*
 
 [![Release](https://img.shields.io/badge/release-v0.7-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v0.7)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-2026.4.26-blue)](https://openclaw.dev)
@@ -119,4 +119,4 @@ curl -s http://127.0.0.1:8000/api/cron
 
 ---
 
-*Copyright © J. Christopher Westland*
+*Copyright © 2026 J. Christopher Westland, all rights reserved*
