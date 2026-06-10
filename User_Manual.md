@@ -1,7 +1,7 @@
 # DermaArtIA User Manual: Deploying a Gemini-Based Multi-Agent AI Company
 
 **Deploying OpenClaw and the FastAPI Secure Web Portal on DigitalOcean with Google Gemini 2.5 Flash**  
-*Copyright © J. Christopher Westland · v0.5*
+*Copyright © J. Christopher Westland · v0.7*
 
 ---
 

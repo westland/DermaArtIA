@@ -3,7 +3,7 @@
 **A deployable five-agent autonomous AI company for marketing analytics, research, and automation in the aesthetics sector.**  
 *Copyright © J. Christopher Westland*
 
-[![Release](https://img.shields.io/badge/release-v0.5-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v0.5)
+[![Release](https://img.shields.io/badge/release-v0.7-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v0.7)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-2026.4.26-blue)](https://openclaw.dev)
 [![Platform](https://img.shields.io/badge/platform-Ubuntu%2024.04-orange)](https://ubuntu.com)
 [![Interface](https://img.shields.io/badge/interface-FastAPI_Web_Portal-purple)](https://fastapi.tiangolo.com)
