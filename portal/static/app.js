@@ -744,6 +744,7 @@ if (voiceBtn && cmdInput) {
         recognition.maxAlternatives = 1;
 
         let isListening = false;
+        let originalValue = "";
 
         voiceBtn.addEventListener("click", () => {
             if (isListening) {
@@ -757,6 +758,7 @@ if (voiceBtn && cmdInput) {
             isListening = true;
             voiceBtn.classList.add("listening");
             cmdInput.placeholder = "Listening... Speak now.";
+            originalValue = cmdInput.value.trim();
         };
 
         recognition.onend = () => {
@@ -776,12 +778,11 @@ if (voiceBtn && cmdInput) {
         };
 
         recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            if (cmdInput.value.trim() === "") {
-                cmdInput.value = transcript;
-            } else {
-                cmdInput.value += " " + transcript;
+            let transcript = "";
+            for (let i = 0; i < event.results.length; ++i) {
+                transcript += event.results[i][0].transcript;
             }
+            cmdInput.value = originalValue + (originalValue ? " " : "") + transcript.trim();
             cmdInput.focus();
         };
     } else {
