@@ -1,4 +1,4 @@
-# The DermaArtIA Educational Manifesto: Architecting Agency in the Era of Autonomous Aesthetics
+# The DermaArtIA Manifesto: Architecting Agency in the Era of Autonomous Aesthetics
 
 *J. Christopher Westland*
 
@@ -14,7 +14,7 @@ In the legacy paradigm, machines were passive recipients of explicit instruction
 
 ### II. The Tripartite Architecture of Agentic Programming
 
-The educational philosophy of DermaArtIA rests on the realization that an autonomous agent is built upon three pillars: **Personality, Action Scripts, and Taboos.**
+The philosophy of DermaArtIA rests on the realization that an autonomous agent is built upon three pillars: **Personality, Action Scripts, and Taboos.**
 
 1. **Personality:** Just as a clinic hires human practitioners for cultural fit and behavioral traits, students learn to construct the "psyche" of an agent. A "Henry" (Chief of Staff) requires a different disposition than a "Scout" (Researcher). We teach students to define the cognitive biases, tone, and professional temperament of their agents to ensure consistent performance.
 2. **Action Scripts:** These are the teleological components of the agent—heuristics designed to achieve specific objectives. Whether the goal is researching competitor pricing, drafting boutique copywriting, or monitoring systems, the action script provides the logical flow the agent follows.

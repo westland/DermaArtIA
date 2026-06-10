@@ -8,7 +8,7 @@
 [![Platform](https://img.shields.io/badge/platform-Ubuntu%2024.04-orange)](https://ubuntu.com)
 [![Interface](https://img.shields.io/badge/interface-FastAPI_Web_Portal-purple)](https://fastapi.tiangolo.com)
 
-> **[The DermaArtIA Educational Manifesto](MANIFESTO.md)** — The course philosophy: Personality, Action Scripts, and Taboos; Druckerian Strategic Realism; and the Zero-Marginal-Cost Agency running entirely on Google Gemini.
+> **[The DermaArtIA Manifesto](MANIFESTO.md)** — The course philosophy: Personality, Action Scripts, and Taboos; Druckerian Strategic Realism; and the Zero-Marginal-Cost Agency running entirely on Google Gemini.
 
 ---
 
@@ -72,7 +72,7 @@ The five agents are:
 ```
 DermaArtIA/
 │
-├── MANIFESTO.md                     ← Educational philosophy
+├── MANIFESTO.md                     ←  philosophy
 ├── README.md                        ← This document
 ├── User_Manual.md                   ← Complete setup and operational guide
 │
