@@ -108,7 +108,12 @@
                                 <!-- Log entries will be populated here -->
                             </div>
                             <div class="console-input-area">
+                                <div id="chat-attachments-preview" class="chat-attachments-preview" style="display: none;"></div>
                                 <form id="command-form">
+                                    <button type="button" id="chat-attachment-btn" class="chat-attachment-btn" title="Attach Pictures/Videos">
+                                        <i class="fa-solid fa-paperclip"></i>
+                                    </button>
+                                    <input type="file" id="chat-file-input" accept="image/*,video/*" multiple style="display:none">
                                     <input type="text" id="command-input" placeholder="Ask Henry to draft copy, research competitors, or deploy changes..." autocomplete="off" required>
                                     <button type="button" id="voice-input-btn" class="voice-btn" title="Voice Input">
                                         <i class="fa-solid fa-microphone"></i>
@@ -282,10 +287,24 @@
             <div class="modal-tabs">
                 <button class="modal-tab-btn active" data-subtab="modal-soul">SOUL & Personality</button>
                 <button class="modal-tab-btn" data-subtab="modal-mem">Workspace Memory</button>
+                <button class="modal-tab-btn" id="modal-files-tab" data-subtab="modal-files">Workspace Files</button>
             </div>
             <div class="modal-body">
                 <div id="modal-soul" class="modal-subpane active markdown-body"></div>
                 <div id="modal-mem" class="modal-subpane markdown-body"></div>
+                <div id="modal-files" class="modal-subpane">
+                    <div class="files-upload-zone" id="files-upload-zone">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <p>Drag & drop pictures or videos here, or click to upload</p>
+                        <input type="file" id="modal-file-input" accept="image/*,video/*" multiple style="display:none">
+                    </div>
+                    <div class="files-list-container">
+                        <h4>Files in Agent Workspace</h4>
+                        <div id="modal-files-list" class="workspace-files-grid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

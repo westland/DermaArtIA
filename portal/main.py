@@ -7,9 +7,11 @@ import urllib.error
 import psutil
 import subprocess
 from datetime import datetime
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile, Query
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import shutil
 
 app = FastAPI(title="Derma Art MedSpa Agent Portal")
 
@@ -321,6 +323,118 @@ def run_cron_job(job_id: str):
         return {"status": "triggered"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+ALLOWED_MEDIA_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".mp4", ".mov", ".avi", ".webm"}
+
+@app.post("/api/media/upload")
+def upload_media(agent_id: str, file: UploadFile = File(...)):
+    # Validate agent
+    valid_agents = ["henry", "coder", "scout", "writer", "watcher"]
+    if agent_id not in valid_agents:
+        raise HTTPException(status_code=400, detail="Invalid agent ID")
+    
+    # Sanitize filename
+    filename = os.path.basename(file.filename)
+    _, ext = os.path.splitext(filename.lower())
+    if ext not in ALLOWED_MEDIA_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Unsupported media file type")
+    
+    # Ensure workspace target path exists
+    agent_workspace = os.path.join(OPENCLAW_HOME, f"workspace-{agent_id}")
+    if not os.path.exists(agent_workspace):
+        raise HTTPException(status_code=404, detail=f"Agent workspace not found: {agent_workspace}")
+        
+    target_path = os.path.join(agent_workspace, filename)
+    
+    try:
+        with open(target_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+            
+        # chown to clawuser if we run as root
+        if os.name != "nt" and os.getuid() == 0:
+            try:
+                import pwd
+                pw = pwd.getpwnam("clawuser")
+                os.chown(target_path, pw.pw_uid, pw.pw_gid)
+            except Exception:
+                subprocess.run(["chown", "clawuser:clawuser", target_path])
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to write file: {e}")
+        
+    return {"status": "success", "filename": filename, "path": target_path}
+
+@app.get("/api/media/list")
+def list_media(agent_id: str):
+    valid_agents = ["henry", "coder", "scout", "writer", "watcher"]
+    if agent_id not in valid_agents:
+        raise HTTPException(status_code=400, detail="Invalid agent ID")
+        
+    agent_workspace = os.path.join(OPENCLAW_HOME, f"workspace-{agent_id}")
+    if not os.path.exists(agent_workspace):
+        return {"files": []}
+        
+    files = []
+    try:
+        for item in os.listdir(agent_workspace):
+            item_path = os.path.join(agent_workspace, item)
+            if os.path.isfile(item_path):
+                _, ext = os.path.splitext(item.lower())
+                if ext in ALLOWED_MEDIA_EXTENSIONS:
+                    stat_info = os.stat(item_path)
+                    files.append({
+                        "name": item,
+                        "size": stat_info.st_size,
+                        "type": "video" if ext in [".mp4", ".mov", ".avi", ".webm"] else "image",
+                        "modified": datetime.fromtimestamp(stat_info.st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+                    })
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to list directory: {e}")
+        
+    files.sort(key=lambda x: x["name"])
+    return {"files": files}
+
+@app.get("/api/media/download")
+def download_media(agent_id: str, filename: str):
+    valid_agents = ["henry", "coder", "scout", "writer", "watcher"]
+    if agent_id not in valid_agents:
+        raise HTTPException(status_code=400, detail="Invalid agent ID")
+        
+    filename = os.path.basename(filename)
+    _, ext = os.path.splitext(filename.lower())
+    if ext not in ALLOWED_MEDIA_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Access denied")
+        
+    agent_workspace = os.path.join(OPENCLAW_HOME, f"workspace-{agent_id}")
+    file_path = os.path.join(agent_workspace, filename)
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+        
+    return FileResponse(file_path)
+
+@app.post("/api/media/delete")
+def delete_media(agent_id: str, filename: str):
+    valid_agents = ["henry", "coder", "scout", "writer", "watcher"]
+    if agent_id not in valid_agents:
+        raise HTTPException(status_code=400, detail="Invalid agent ID")
+        
+    filename = os.path.basename(filename)
+    _, ext = os.path.splitext(filename.lower())
+    if ext not in ALLOWED_MEDIA_EXTENSIONS:
+        raise HTTPException(status_code=400, detail="Access denied")
+        
+    agent_workspace = os.path.join(OPENCLAW_HOME, f"workspace-{agent_id}")
+    file_path = os.path.join(agent_workspace, filename)
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+        
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete file: {e}")
+        
+    return {"status": "success"}
 
 # Mount static folder
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")

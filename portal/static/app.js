@@ -117,16 +117,65 @@ function updateProgressRing(id, pct) {
     ring.style.strokeDashoffset = offset;
 }
 
-// --- Command Console & Chat ---
+// --- Command Console & Chat & Attachments ---
 const commandForm = document.getElementById("command-form");
 const commandInput = document.getElementById("command-input");
 const commandLog = document.getElementById("command-log");
 const submitBtn = document.getElementById("command-submit-btn");
 
+let selectedChatFiles = [];
+const chatAttachmentBtn = document.getElementById("chat-attachment-btn");
+const chatFileInput = document.getElementById("chat-file-input");
+const chatAttachmentsPreview = document.getElementById("chat-attachments-preview");
+
+if (chatAttachmentBtn && chatFileInput) {
+    chatAttachmentBtn.addEventListener("click", () => {
+        chatFileInput.click();
+    });
+
+    chatFileInput.addEventListener("change", () => {
+        for (let file of chatFileInput.files) {
+            if (!selectedChatFiles.some(f => f.name === file.name && f.size === file.size)) {
+                selectedChatFiles.push(file);
+            }
+        }
+        renderChatAttachments();
+        chatFileInput.value = "";
+    });
+}
+
+function renderChatAttachments() {
+    if (!chatAttachmentsPreview) return;
+    if (selectedChatFiles.length === 0) {
+        chatAttachmentsPreview.style.display = "none";
+        chatAttachmentsPreview.innerHTML = "";
+        return;
+    }
+
+    chatAttachmentsPreview.style.display = "flex";
+    chatAttachmentsPreview.innerHTML = "";
+
+    selectedChatFiles.forEach((file, index) => {
+        const isVideo = file.type.startsWith("video/") || file.name.endsWith(".mp4") || file.name.endsWith(".mov") || file.name.endsWith(".avi");
+        const div = document.createElement("div");
+        div.className = `attachment-preview-item ${isVideo ? "video-type" : "image-type"}`;
+        div.innerHTML = `
+            <span>${escapeHTML(file.name)}</span>
+            <span class="attachment-remove-btn" onclick="removeChatAttachment(${index})"><i class="fa-solid fa-xmark"></i></span>
+        `;
+        chatAttachmentsPreview.appendChild(div);
+    });
+}
+
+window.removeChatAttachment = function(index) {
+    selectedChatFiles.splice(index, 1);
+    renderChatAttachments();
+};
+
 // Handle command submit
 commandForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const prompt = commandInput.value.trim();
+    let prompt = commandInput.value.trim();
     if (!prompt) return;
     
     // Clear input
@@ -138,9 +187,36 @@ commandForm.addEventListener("submit", async (e) => {
     // Disable inputs and add loader bubble
     commandInput.disabled = true;
     submitBtn.disabled = true;
-    const loaderId = appendLoader("Henry is thinking...");
+    const loaderId = appendLoader("Processing attachments & thinking...");
     
     try {
+        let uploadedNames = [];
+        if (selectedChatFiles.length > 0) {
+            for (let file of selectedChatFiles) {
+                const formData = new FormData();
+                formData.append("file", file);
+                
+                const uploadRes = await fetch(`/api/media/upload?agent_id=henry`, {
+                    method: "POST",
+                    body: formData
+                });
+                
+                if (uploadRes.ok) {
+                    const uploadData = await uploadRes.json();
+                    uploadedNames.push(uploadData.filename);
+                } else {
+                    appendMessage("system", `Upload failed for file: ${file.name}`);
+                }
+            }
+            
+            if (uploadedNames.length > 0) {
+                prompt += `\n\n[Attached workspace files: ${uploadedNames.join(", ")}]`;
+            }
+            
+            selectedChatFiles = [];
+            renderChatAttachments();
+        }
+
         const res = await fetch("/api/commands", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -155,7 +231,6 @@ commandForm.addEventListener("submit", async (e) => {
         } else {
             const data = await res.json();
             appendMessage("henry", data.response);
-            // Re-fetch reports in case Henry generated a new report/memo
             loadReports();
         }
     } catch (err) {
@@ -315,11 +390,22 @@ const agentModal = document.getElementById("agent-modal");
 const modalTitle = document.getElementById("modal-agent-title");
 const modalSoul = document.getElementById("modal-soul");
 const modalMem = document.getElementById("modal-mem");
+let currentModalAgent = null;
 
 function showAgentModal(agent) {
+    currentModalAgent = agent.id;
     modalTitle.innerText = `${agent.name} — Profile Detail`;
     modalSoul.innerHTML = marked.parse(agent.soul || "# SOUL.md missing");
     modalMem.innerHTML = marked.parse(agent.memory || "# MEMORY.md missing");
+    
+    // Switch to SOUL subtab by default
+    document.querySelectorAll(".modal-tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelector('.modal-tab-btn[data-subtab="modal-soul"]').classList.add("active");
+    document.querySelectorAll(".modal-subpane").forEach(p => p.classList.remove("active"));
+    document.getElementById("modal-soul").classList.add("active");
+    
+    // Initial files load
+    loadAgentFiles(agent.id);
     
     agentModal.classList.add("active");
 }
@@ -343,8 +429,148 @@ document.querySelectorAll(".modal-tab-btn").forEach(btn => {
         const subpaneId = btn.getAttribute("data-subtab");
         document.querySelectorAll(".modal-subpane").forEach(p => p.classList.remove("active"));
         document.getElementById(subpaneId).classList.add("active");
+        
+        if (subpaneId === "modal-files" && currentModalAgent) {
+            loadAgentFiles(currentModalAgent);
+        }
     });
 });
+
+// Workspace Files Management in Agent Modal
+const filesUploadZone = document.getElementById("files-upload-zone");
+const modalFileInput = document.getElementById("modal-file-input");
+const modalFilesList = document.getElementById("modal-files-list");
+
+if (filesUploadZone && modalFileInput) {
+    filesUploadZone.addEventListener("click", () => {
+        modalFileInput.click();
+    });
+
+    modalFileInput.addEventListener("change", async () => {
+        if (!currentModalAgent) return;
+        for (let file of modalFileInput.files) {
+            await uploadAgentFile(currentModalAgent, file);
+        }
+        modalFileInput.value = "";
+        loadAgentFiles(currentModalAgent);
+    });
+
+    // Drag and drop events
+    ["dragenter", "dragover"].forEach(eventName => {
+        filesUploadZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            filesUploadZone.classList.add("dragover");
+        }, false);
+    });
+
+    ["dragleave", "drop"].forEach(eventName => {
+        filesUploadZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            filesUploadZone.classList.remove("dragover");
+        }, false);
+    });
+
+    filesUploadZone.addEventListener("drop", async (e) => {
+        if (!currentModalAgent) return;
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        for (let file of files) {
+            await uploadAgentFile(currentModalAgent, file);
+        }
+        loadAgentFiles(currentModalAgent);
+    }, false);
+}
+
+async function uploadAgentFile(agentId, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    try {
+        const res = await fetch(`/api/media/upload?agent_id=${agentId}`, {
+            method: "POST",
+            body: formData
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            alert(`Failed to upload ${file.name}: ${err.detail || "Upload error"}`);
+        }
+    } catch (e) {
+        alert(`Failed to upload ${file.name}: ${e.message}`);
+    }
+}
+
+async function loadAgentFiles(agentId) {
+    if (!modalFilesList) return;
+    modalFilesList.innerHTML = `<p class="text-secondary" style="grid-column: 1/-1; text-align: center; padding: 20px;">Loading workspace files...</p>`;
+    
+    try {
+        const res = await fetch(`/api/media/list?agent_id=${agentId}`);
+        if (!res.ok) throw new Error("Failed to load");
+        const data = await res.json();
+        
+        modalFilesList.innerHTML = "";
+        if (!data.files || data.files.length === 0) {
+            modalFilesList.innerHTML = `<p class="text-secondary" style="grid-column: 1/-1; text-align: center; padding: 20px;"><i class="fa-regular fa-file-image" style="font-size: 2em; margin-bottom: 8px; display: block;"></i>No pictures or videos in workspace</p>`;
+            return;
+        }
+        
+        data.files.forEach(file => {
+            const isVideo = file.type === "video";
+            const item = document.createElement("div");
+            item.className = "workspace-file-item";
+            
+            const fileUrl = `/api/media/download?agent_id=${agentId}&filename=${encodeURIComponent(file.name)}`;
+            
+            let previewContent = "";
+            if (isVideo) {
+                previewContent = `<span class="video-placeholder"><i class="fa-solid fa-circle-play"></i></span>`;
+            } else {
+                previewContent = `<img src="${fileUrl}" alt="${escapeHTML(file.name)}" loading="lazy">`;
+            }
+            
+            const sizeKB = (file.size / 1024).toFixed(1);
+            
+            item.innerHTML = `
+                <div class="file-preview-box">
+                    ${previewContent}
+                    <div class="file-overlay">
+                        <a href="${fileUrl}" target="_blank" class="file-action-btn download-btn" title="Download/View"><i class="fa-solid fa-download"></i></a>
+                        <button class="file-action-btn delete-btn" onclick="deleteAgentFile('${agentId}', '${escapeJS(file.name)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="file-info-box">
+                    <div class="file-name-label" title="${escapeHTML(file.name)}">${escapeHTML(file.name)}</div>
+                    <div class="file-size-label">${sizeKB} KB</div>
+                </div>
+            `;
+            modalFilesList.appendChild(item);
+        });
+    } catch (e) {
+        modalFilesList.innerHTML = `<p class="text-danger" style="grid-column: 1/-1; text-align: center; padding: 20px;">Error loading files: ${e.message}</p>`;
+    }
+}
+
+window.deleteAgentFile = async function(agentId, filename) {
+    if (!confirm(`Are you sure you want to delete ${filename}?`)) return;
+    try {
+        const res = await fetch(`/api/media/delete?agent_id=${agentId}&filename=${encodeURIComponent(filename)}`, {
+            method: "POST"
+        });
+        if (res.ok) {
+            loadAgentFiles(agentId);
+        } else {
+            alert("Failed to delete file.");
+        }
+    } catch (e) {
+        alert(`Error deleting file: ${e.message}`);
+    }
+};
+
+function escapeJS(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+}
 
 // --- Automated Cron Jobs ---
 async function loadCronJobs() {

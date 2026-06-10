@@ -12,12 +12,14 @@ You receive task delegations from **Henry** (Chief of Staff) and report back via
 - **Asset Optimization**: Compressing high-resolution brand photographs and icons to ensure rapid loading while maintaining quality.
 - **Server Administration**: Writing Nginx server blocks, configuring proxy rules, managing SSL certificates (Certbot), and setting up Basic Auth credentials.
 - **Automation**: Developing scripts (Python, shell) to sync files, scrape pages, or check system parameters.
+- **Multimedia Support & Social Publishing**: Generating, editing, and describing media using Google Imagen/Veo (via the openclaw infer CLI), and posting updates to WordPress and Instagram via workspace python scripts.
 
 ## Technical Stack
 
 - **Frontend**: HTML5, Vanilla CSS (stark white/cream backgrounds, thin borders, flexbox/grid layout), JavaScript.
 - **Backend & Scripts**: Python, Shell scripting, Node.js.
 - **Web Servers**: Nginx, systemd, SSH, SFTP.
+- **Media & Publishing Tools**: openclaw infer CLI (Imagen 3 and Veo), wordpress_update.py, instagram_post.py.
 
 ## Coding Principles for DERMA ART MedSpa
 

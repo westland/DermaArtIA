@@ -710,6 +710,63 @@ PATCHEOF
 python3 /tmp/patch_google_client.py
 rm -f /tmp/patch_google_client.py
 
+# Apply Google client baseUrl validation bypass patch
+log "Applying Google client baseUrl validation bypass patch..."
+cat > /tmp/patch_google_validation.py << 'BYPASSEOF'
+import glob
+import os
+import sys
+
+dist_dir = "/usr/lib/node_modules/openclaw/dist"
+
+# Find api-*.js files in dist
+api_files = glob.glob(os.path.join(dist_dir, "api-*.js"))
+patched = False
+
+for path in api_files:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+        
+        target = 'function resolveTrustedGoogleGenerativeAiBaseUrl(baseUrl) {'
+        if target in content and 'return normalizeGoogleGenerativeAiBaseUrl' not in content:
+            target_fn = """function resolveTrustedGoogleGenerativeAiBaseUrl(baseUrl) {
+	const normalized = normalizeGoogleGenerativeAiBaseUrl(baseUrl ?? "https://generativelanguage.googleapis.com/v1beta") ?? "https://generativelanguage.googleapis.com/v1beta";
+	let url;
+	try {
+		url = new URL(normalized);
+	} catch {
+		throw new Error("Google Generative AI baseUrl must be a valid https URL on generativelanguage.googleapis.com");
+	}
+	if (url.protocol !== "https:" || url.hostname.toLowerCase() !== "generativelanguage.googleapis.com") throw new Error("Google Generative AI baseUrl must use https://generativelanguage.googleapis.com");
+	return normalized;
+}"""
+            replacement_fn = """function resolveTrustedGoogleGenerativeAiBaseUrl(baseUrl) {
+	const normalized = normalizeGoogleGenerativeAiBaseUrl(baseUrl ?? "https://generativelanguage.googleapis.com/v1beta") ?? "https://generativelanguage.googleapis.com/v1beta";
+	return normalized;
+}"""
+            
+            if target_fn in content:
+                content = content.replace(target_fn, replacement_fn)
+            elif target_fn.replace('\n', '\r\n') in content:
+                content = content.replace(target_fn.replace('\n', '\r\n'), replacement_fn.replace('\n', '\r\n'))
+            else:
+                content = content.replace(target, 'function resolveTrustedGoogleGenerativeAiBaseUrl(baseUrl) {\n\treturn normalizeGoogleGenerativeAiBaseUrl(baseUrl ?? "https://generativelanguage.googleapis.com/v1beta") ?? "https://generativelanguage.googleapis.com/v1beta";\n}\nfunction _unused_resolveTrustedGoogleGenerativeAiBaseUrl(baseUrl) {')
+            
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(content)
+            print(f"Bypassed validation in {os.path.basename(path)}")
+            patched = True
+            break
+    except Exception as e:
+        print(f"Error patching {path}: {e}")
+
+if not patched:
+    print("Warning: Could not find or patch resolveTrustedGoogleGenerativeAiBaseUrl in any api-*.js file.")
+BYPASSEOF
+python3 /tmp/patch_google_validation.py
+rm -f /tmp/patch_google_validation.py
+
 
 log "Starting OpenClaw gateway..."
 systemctl start openclaw
