@@ -1,7 +1,7 @@
 # DermaArtIA User Manual: Deploying a Gemini-Based Multi-Agent AI Company
 
 **Deploying OpenClaw and the FastAPI Secure Web Portal on DigitalOcean with Google Gemini 2.5 Flash**  
-*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.7*
+*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.8*
 
 ---
 
@@ -237,5 +237,5 @@ Coder has access to two pre-packaged scripts inside the workspace:
 2. **`instagram_post.py`**: Interacts with the Instagram Graph API to post media (via the public link returned by the WordPress script).
 
 ---
-*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.7*
+*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.8*
 
