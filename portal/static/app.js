@@ -266,12 +266,36 @@ function appendMessage(sender, text) {
         // Agent message
         div.className = "agent-message-bubble";
         
+        // Parse any MEDIA:<path> tags and render them inline
+        let mediaHtml = "";
+        let cleanText = text.replace(/^MEDIA:(.+)$/gm, (match, path) => {
+            const trimmedPath = path.trim();
+            const isVideo = trimmedPath.endsWith(".mp4") || trimmedPath.endsWith(".mov") || trimmedPath.endsWith(".avi") || trimmedPath.endsWith(".webm");
+            let mediaUrl = "";
+            if (trimmedPath.startsWith("/home/clawuser/.openclaw/media/")) {
+                mediaUrl = `/api/media/generated?filepath=${encodeURIComponent(trimmedPath)}`;
+            } else if (trimmedPath.startsWith("/") || trimmedPath.startsWith("C:")) {
+                mediaUrl = `/api/media/generated?filepath=${encodeURIComponent(trimmedPath)}`;
+            } else if (trimmedPath.startsWith("http://") || trimmedPath.startsWith("https://")) {
+                mediaUrl = trimmedPath;
+            } else {
+                mediaUrl = `/api/media/download?agent_id=${sender}&filename=${encodeURIComponent(trimmedPath)}`;
+            }
+            
+            if (isVideo) {
+                mediaHtml += `<div class="msg-media-container" style="margin-top: 10px; max-width: 100%;"><video src="${mediaUrl}" controls style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"></video></div>`;
+            } else {
+                mediaHtml += `<div class="msg-media-container" style="margin-top: 10px; max-width: 100%;"><img src="${mediaUrl}" alt="Generated media" style="max-width: 100%; max-height: 400px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);" /></div>`;
+            }
+            return "";
+        });
+
         // Enable marked parsing on the agent output (allows beautiful tables, bullets, lists)
-        const parsedContent = marked.parse(text);
+        const parsedContent = marked.parse(cleanText.trim());
         
         div.innerHTML = `
             <div class="agent-message-header">${sender.toUpperCase()} (Chief of Staff)</div>
-            <div class="agent-message-content">${parsedContent}</div>
+            <div class="agent-message-content">${parsedContent}${mediaHtml}</div>
         `;
     }
     

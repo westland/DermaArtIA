@@ -434,7 +434,14 @@ def delete_media(agent_id: str, filename: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to delete file: {e}")
         
-    return {"status": "success"}
+@app.get("/api/media/generated")
+def download_generated_media(filepath: str):
+    # Ensure the target file is inside openclaw home media directory for safety
+    if not filepath.startswith(OPENCLAW_HOME + "/media/"):
+        raise HTTPException(status_code=400, detail="Access denied")
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(filepath)
 
 # Mount static folder
 app.mount("/", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static"), html=True), name="static")
