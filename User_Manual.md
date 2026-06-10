@@ -1,7 +1,7 @@
 # DermaArtIA User Manual: Deploying a Gemini-Based Multi-Agent AI Company
 
 **Deploying OpenClaw and the FastAPI Secure Web Portal on DigitalOcean with Google Gemini 2.5 Flash**  
-*J. Christopher Westland · v0.5*
+*Copyright © J. Christopher Westland · v0.5*
 
 ---
 
@@ -21,6 +21,7 @@
 8. [Automating Tasks (Cron Jobs)](#8-automating-tasks-cron-jobs)
 9. [Bypassing SSL Warnings on Mobile](#9-bypassing-ssl-warnings-on-mobile)
 10. [Troubleshooting](#10-troubleshooting)
+11. [Multimedia & Social Publishing](#11-multimedia--social-publishing)
 
 ---
 
@@ -176,3 +177,34 @@ journalctl -u dermaart-portal -n 40 --no-pager
 ```bash
 su - clawuser -c "openclaw config validate"
 ```
+
+---
+
+## 11. Multimedia & Social Publishing
+
+The DermaArtIA platform is equipped to generate, modify, and publish images and videos.
+
+### Workspace File Management & Chat Attachments
+1. **Chat Attachments**: In the **Command Center**, click the paperclip icon in the message bar to select images or videos to upload. They are uploaded to `/api/media/upload?agent_id=henry` and stored in Henry's workspace.
+2. **Workspace Files Tab**: Go to the **Agent Roster** tab, select an agent (e.g. **Coder**), and click **Workspace Files**. You can drag-and-drop images/videos to upload them directly, view listed files, download them, or delete them.
+
+### Generative AI (Imagen & Veo) CLI Commands
+The agent system is configured with Google's image and video generation APIs:
+* **Image Generation (Imagen)**:
+  ```bash
+  su - clawuser -c 'openclaw infer image generate --prompt "A minimalist silhouette of a lavender plant" --output ~/.openclaw/workspace-coder/lavender.jpg'
+  ```
+* **Video Generation (Veo)**:
+  ```bash
+  su - clawuser -c 'openclaw infer video generate --prompt "A close up of orchids blowing in the wind" --output ~/.openclaw/workspace-coder/orchids.mp4'
+  ```
+* **Image Editing (Imagen Edit)**:
+  ```bash
+  su - clawuser -c 'openclaw infer image edit --file ~/.openclaw/workspace-coder/lavender.jpg --prompt "make the background sunset colors" --output ~/.openclaw/workspace-coder/lavender_sunset.jpg'
+  ```
+
+### Automating Social Updates
+Coder has access to two pre-packaged scripts inside the workspace:
+1. **`wordpress_update.py`**: Interacts with your WordPress site to upload media files and inject page/post HTML copy.
+2. **`instagram_post.py`**: Interacts with the Instagram Graph API to post media (via the public link returned by the WordPress script).
+

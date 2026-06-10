@@ -1,6 +1,6 @@
 # The DermaArtIA Manifesto: Architecting Agency in the Era of Autonomous Aesthetics
 
-*J. Christopher Westland*
+*Copyright © J. Christopher Westland*
 
 ---
 
@@ -29,6 +29,7 @@ Unlike legacy frameworks relying on external APIs, DermaArtIA implements core ar
 1. **Gemini 2.5 Flash Engine**: Every agent runs on the state-of-the-art `google/gemini-2.5-flash` model. This model offers high speed, native multimodal reasoning, and a massive context window at a fraction of the cost of legacy models.
 2. **Root-Level Client Optimization**: Traditional HTTP SDK limits often cause 30-second connection timeouts during multi-step reasoning. DermaArtIA includes a custom root-level patching mechanism that intercepts `@google/genai` calls, increasing the timeout window to 5 minutes to accommodate deep reasoning.
 3. **Insecure Context Bypass (HTTPS Self-Signed)**: Speech-to-text requires a secure context. DermaArtIA automatically generates self-signed SSL certificates for raw IP addresses, reconfiguring Nginx to bypass browser security restrictions and enable voice typing on mobile devices.
+4. **Bespoke Generative Media & Social Publishing Pipeline**: Agents leverage Google Imagen (`gemini-3.1-flash-image-preview`) for image generation/editing and Google Veo (`veo-3.1-fast-generate-preview`) for video generation. They are equipped with automation scripts (`wordpress_update.py` and `instagram_post.py`) to upload media to WordPress and post content directly to Instagram. We bypass strict base URL validation checks inside the gateway core to enable seamless execution of these Google generative AI features.
 
 ---
 
@@ -67,4 +68,4 @@ These agents do not just automate; they innovate and negotiate. They operate 24/
 
 ---
 
-*Materials © J. Christopher Westland*
+*Copyright © J. Christopher Westland*

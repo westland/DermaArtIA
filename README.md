@@ -1,7 +1,7 @@
 # DermaArtIA — Google Gemini-Based Multi-Agent AI Company
 
 **A deployable five-agent autonomous AI company for marketing analytics, research, and automation in the aesthetics sector.**  
-*J. Christopher Westland*
+*Copyright © J. Christopher Westland*
 
 [![Release](https://img.shields.io/badge/release-v0.5-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v0.5)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-2026.4.26-blue)](https://openclaw.dev)
@@ -19,6 +19,8 @@ DermaArtIA is a multi-agent AI company running 24/7 on a secure cloud server, de
 2. **Mobile Collapsible Sidebar**: Fully responsive mobile/tablet layout with a slide-out drawer menu and stacked dashboards.
 3. **Automated Jobs Center**: Live scheduler displaying cron run history, last run statuses (e.g. `ok`, `error`), and a "Run Now" trigger button pulling directly from the active SQLite database.
 4. **Reports & Briefings Viewer**: A clean Markdown reader where Scout, Writer, and Watcher submit automated memos and research briefings.
+5. **Interactive Media Uploads & Workspace File Manager**: Upload images or videos using a drag-and-drop zone or chat attachments to put assets directly in the agent's workspace.
+6. **Social Publishing & Generative AI Hub**: Leverage Google Imagen and Veo to generate and modify photos and videos, and execute Coder scripts to update WordPress pages and publish posts on Instagram.
 
 The five agents are:
 
@@ -117,4 +119,4 @@ curl -s http://127.0.0.1:8000/api/cron
 
 ---
 
-*J. Christopher Westland*
+*Copyright © J. Christopher Westland*
