@@ -1,0 +1,14 @@
+[Unit]
+Description=DERMA ART MedSpa Portal API
+After=network.target openclaw.service
+Wants=openclaw.service
+
+[Service]
+User=root
+WorkingDirectory=/opt/dermaart-portal
+ExecStart=/opt/dermaart-portal/venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

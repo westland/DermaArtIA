@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DERMA ART MedSpa — AI Command Center</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar overlay for mobile tapping outside -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand-section">
+                <div class="brand-logo">
+                    <span class="logo-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                    <span class="logo-text">DERMA ART</span>
+                </div>
+                <div class="brand-subtitle">MEDSPA AI PORTAL</div>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="tab-command">
+                    <i class="fa-solid fa-terminal"></i> Command Center
+                </button>
+                <button class="nav-item" data-tab="tab-roster">
+                    <i class="fa-solid fa-users-gear"></i> Agent Roster
+                </button>
+                <button class="nav-item" data-tab="tab-cron">
+                    <i class="fa-solid fa-clock"></i> Automated Jobs
+                </button>
+                <button class="nav-item" data-tab="tab-reports">
+                    <i class="fa-solid fa-file-invoice"></i> Reports & Memos
+                </button>
+                <button class="nav-item" data-tab="tab-system">
+                    <i class="fa-solid fa-server"></i> System Status
+                </button>
+            </nav>
+            
+            <div class="provider-badge">
+                <div class="provider-avatar">SK</div>
+                <div class="provider-info">
+                    <div class="provider-name">Sumar Kasik, RN</div>
+                    <div class="provider-role">Direct Provider</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle" class="sidebar-toggle-btn" title="Toggle Sidebar">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="header-title-sec">
+                        <h1 id="page-title">Command Center</h1>
+                        <p id="page-desc">Issue requests and direct tasks to your Chief of Staff, Henry.</p>
+                    </div>
+                </div>
+                <div class="system-quick-stats">
+                    <div class="quick-stat">
+                        <span class="stat-lbl">Gateway:</span>
+                        <span id="gateway-status-badge" class="badge badge-inactive">Checking...</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="stat-lbl">CPU:</span>
+                        <span id="quick-cpu" class="stat-val">0%</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="stat-lbl">RAM:</span>
+                        <span id="quick-ram" class="stat-val">0 / 0 GB</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Pages -->
+            <div class="content-body">
+                
+                <!-- Tab 1: Command Center -->
+                <section id="tab-command" class="tab-pane active">
+                    <div class="command-grid">
+                        <!-- Chat/Console Area -->
+                        <div class="console-card">
+                            <div class="console-header">
+                                <div class="console-dot-group">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="console-title">henry@dermaart-chief-of-staff</div>
+                            </div>
+                            <div class="console-body" id="command-log">
+                                <div class="system-message">
+                                    <span class="msg-time">[System Initialized]</span> Welcome, Sumar. Issue commands or outline tasks to Henry (Chief of Staff). He will coordinate with Scout, Writer, Coder, and Watcher to carry out your requests.
+                                </div>
+                                <!-- Log entries will be populated here -->
+                            </div>
+                            <div class="console-input-area">
+                                <form id="command-form">
+                                    <input type="text" id="command-input" placeholder="Ask Henry to draft copy, research competitors, or deploy changes..." autocomplete="off" required>
+                                    <button type="button" id="voice-input-btn" class="voice-btn" title="Voice Input">
+                                        <i class="fa-solid fa-microphone"></i>
+                                    </button>
+                                    <button type="submit" id="command-submit-btn">
+                                        <span>Send</span> <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Guidelines & Quick Shortcuts -->
+                        <div class="shortcuts-card">
+                            <h3>Aesthetic Focus Guidelines</h3>
+                            <ul class="guidelines-list">
+                                <li><strong>Boutique Artistry</strong>: Emphasize direct access to Sumar Kasik, RN. No rotating staff or front desk friction.</li>
+                                <li><strong>Minimalist Homepage</strong>: Clean, tranquil cream/white base, thin borders, brand photos.</li>
+                                <li><strong>Treatments</strong>: Neuromodulators, Dermal Fillers, Biostimulators.</li>
+                                <li><strong>Financing</strong>: Subtle integration of Cherry and CareCredit.</li>
+                            </ul>
+                            
+                            <h3>Quick Actions</h3>
+                            <div class="shortcuts-buttons">
+                                <button class="btn btn-shortcut" data-prompt="Henry, have Scout research the latest aesthetic competitor pricing in Scottsdale. Log the summary.">
+                                    <i class="fa-solid fa-magnifying-glass-dollar"></i> Scan Local Competitor Pricing
+                                </button>
+                                <button class="btn btn-shortcut" data-prompt="Henry, ask Writer to draft a new 'Direct Access' distinction section copy for the home page.">
+                                    <i class="fa-solid fa-pen-nib"></i> Draft 'Direct Access' Blurb
+                                </button>
+                                <button class="btn btn-shortcut" data-prompt="Henry, ask Watcher to run a system check on our MedSpa website deployment server.">
+                                    <i class="fa-solid fa-heartbeat"></i> Run System Infrastructure Check
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab 2: Agent Roster -->
+                <section id="tab-roster" class="tab-pane">
+                    <div class="roster-grid" id="agents-container">
+                        <!-- Cards dynamically injected -->
+                    </div>
+                </section>
+
+                <!-- Tab 3: Cron Jobs -->
+                <section id="tab-cron" class="tab-pane">
+                    <div class="cron-container">
+                        <div class="cron-intro card">
+                            <p><i class="fa-solid fa-circle-info text-cyan"></i> The following automated jobs are scheduled via systemd services on your DigitalOcean server. You can monitor their status or execute them immediately on-demand.</p>
+                        </div>
+                        <div class="cron-grid" id="cron-container">
+                            <!-- Cron cards dynamically injected -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab 4: Reports & Archive -->
+                <section id="tab-reports" class="tab-pane">
+                    <div class="reports-layout">
+                        <!-- Left Sidebar: Report List -->
+                        <div class="reports-list-card">
+                            <div class="card-header-simple">
+                                <h3>Generated Briefings</h3>
+                            </div>
+                            <div class="reports-list" id="reports-list-container">
+                                <!-- Report items dynamically injected -->
+                            </div>
+                        </div>
+                        <!-- Right Pane: Report Reader -->
+                        <div class="report-viewer-card">
+                            <div class="viewer-header">
+                                <h3 id="report-view-title">Select a report</h3>
+                                <div class="report-meta" id="report-view-meta">Click on a report from the list to display details here.</div>
+                            </div>
+                            <div class="viewer-body markdown-body" id="report-view-body">
+                                <div class="empty-state">
+                                    <i class="fa-regular fa-folder-open"></i>
+                                    <p>No report loaded</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab 5: System Status -->
+                <section id="tab-system" class="tab-pane">
+                    <div class="system-layout">
+                        <div class="metrics-grid">
+                            <!-- Memory Card -->
+                            <div class="metric-card card">
+                                <h3>RAM Memory</h3>
+                                <div class="metric-visual">
+                                    <svg class="progress-ring" width="120" height="120">
+                                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                        <circle id="ram-ring" class="progress-ring__circle" stroke="#58a6ff" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.15" stroke-dashoffset="314.15"/>
+                                    </svg>
+                                    <div class="metric-text" id="sys-ram-val">0%</div>
+                                </div>
+                                <div class="metric-details" id="sys-ram-details">0 / 0 GB used</div>
+                            </div>
+                            
+                            <!-- CPU Card -->
+                            <div class="metric-card card">
+                                <h3>CPU Load</h3>
+                                <div class="metric-visual">
+                                    <svg class="progress-ring" width="120" height="120">
+                                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                        <circle id="cpu-ring" class="progress-ring__circle" stroke="#7ee787" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.15" stroke-dashoffset="314.15"/>
+                                    </svg>
+                                    <div class="metric-text" id="sys-cpu-val">0%</div>
+                                </div>
+                                <div class="metric-details" id="sys-cpu-details">Processor active load</div>
+                            </div>
+
+                            <!-- Disk Card -->
+                            <div class="metric-card card">
+                                <h3>Disk Space</h3>
+                                <div class="metric-visual">
+                                    <svg class="progress-ring" width="120" height="120">
+                                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                        <circle id="disk-ring" class="progress-ring__circle" stroke="#d29922" stroke-width="8" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.15" stroke-dashoffset="314.15"/>
+                                    </svg>
+                                    <div class="metric-text" id="sys-disk-val">0%</div>
+                                </div>
+                                <div class="metric-details" id="sys-disk-details">0 / 0 GB used</div>
+                            </div>
+                        </div>
+
+                        <!-- Process Details -->
+                        <div class="sys-processes card">
+                            <h3>Gateway Process Details</h3>
+                            <table class="sys-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Process Name:</td>
+                                        <td><code class="text-cyan">openclaw-gateway</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td>PID:</td>
+                                        <td id="sys-proc-pid">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Uptime:</td>
+                                        <td id="sys-proc-uptime">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RSS Memory:</td>
+                                        <td id="sys-proc-mem">—</td>
+                                    </tr>
+                                    <tr>
+                                        <td>API Location:</td>
+                                        <td><code>http://127.0.0.1:18789</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Agent Detail Modal -->
+    <div class="modal-backdrop" id="agent-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modal-agent-title">Agent Profile</h2>
+                <button class="modal-close-btn" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" data-subtab="modal-soul">SOUL & Personality</button>
+                <button class="modal-tab-btn" data-subtab="modal-mem">Workspace Memory</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-soul" class="modal-subpane active markdown-body"></div>
+                <div id="modal-mem" class="modal-subpane markdown-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+[Unit]
+Description=OpenClaw AI Agent Gateway — ClawInc
+Documentation=https://openclaw.dev/docs
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=clawuser
+Group=clawuser
+WorkingDirectory=/home/clawuser
+ExecStartPre=/usr/bin/resolvectl flush-caches
+ExecStartPre=/usr/local/bin/fix-openclaw-symlinks.sh
+ExecStart=/usr/bin/openclaw gateway run
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+Environment=NODE_ENV=production
+Environment=HOME=/home/clawuser
+Environment="NODE_OPTIONS=--max-old-space-size=1024 --dns-result-order=ipv4first"
+Environment=NODE_COMPILE_CACHE=/home/clawuser/.cache/node-compile-cache
+Environment=OPENCLAW_HANDSHAKE_TIMEOUT_MS=120000
+Environment=OPENCLAW_NO_RESPAWN=1
+
+MemoryMax=1500M
+MemoryHigh=1400M
+TasksMax=64
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=openclaw
+
+[Install]
+WantedBy=multi-user.target

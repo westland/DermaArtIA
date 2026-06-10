@@ -1,0 +1,89 @@
+{
+  "env": {
+    "GEMINI_API_KEY": "YOUR_GEMINI_API_KEY",
+    "GOOGLE_API_KEY": "YOUR_GEMINI_API_KEY",
+    "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY",
+    "DISCORD_WEBHOOK_URL": "http://127.0.0.1:8000/api/reports/submit"
+  },
+  "gateway": {
+    "mode": "local",
+    "http": {
+      "endpoints": {
+        "chatCompletions": {
+          "enabled": true
+        }
+      }
+    },
+    "auth": {
+      "mode": "none"
+    }
+  },
+  "acp": {
+    "enabled": true,
+    "allowedAgents": [
+      "henry",
+      "coder",
+      "scout",
+      "writer",
+      "watcher"
+    ],
+    "maxConcurrentSessions": 2
+  },
+  "agents": {
+    "defaults": {
+      "model": { "primary": "google/gemini-2.5-flash" },
+      "subagents": { "allowAgents": ["scout","writer","coder"], "maxSpawnDepth": 1 }
+    },
+    "list": [
+      { "id": "henry",   "name": "Henry",   "default": true,
+        "workspace": "~/.openclaw/workspace-henry",   "agentDir": "~/.openclaw/agents/henry",   "model": "google/gemini-2.5-flash" },
+      { "id": "coder",   "name": "Coder",
+        "workspace": "~/.openclaw/workspace-coder",   "agentDir": "~/.openclaw/agents/coder",   "model": "google/gemini-2.5-flash" },
+      { "id": "scout",   "name": "Scout",
+        "workspace": "~/.openclaw/workspace-scout",   "agentDir": "~/.openclaw/agents/scout",   "model": "google/gemini-2.5-flash" },
+      { "id": "writer",  "name": "Writer",
+        "workspace": "~/.openclaw/workspace-writer",  "agentDir": "~/.openclaw/agents/writer",  "model": "google/gemini-2.5-flash" },
+      { "id": "watcher", "name": "Watcher",
+        "workspace": "~/.openclaw/workspace-watcher", "agentDir": "~/.openclaw/agents/watcher", "model": "google/gemini-2.5-flash" }
+    ]
+  },
+  "models": {
+    "providers": {
+      "google": {
+        "timeoutSeconds": 300
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": false
+    }
+  },
+  "bindings": [],
+  "memory": {
+    "backend": "builtin"
+  },
+  "logging": {
+    "level": "info",
+    "file": "~/.openclaw/logs/openclaw.log"
+  },
+  "cron": { "enabled": true },
+  "tools": {
+    "exec": { "security": "full", "ask": "off" },
+    "media": { "audio": { "enabled": false, "echoTranscript": true } },
+    "message": { "crossContext": { "allowAcrossProviders": true } }
+  },
+  "approvals": { "exec": { "enabled": false } },
+  "plugins": {
+    "entries": {
+      "google":        { "enabled": true  },
+      "anthropic":     { "enabled": false },
+      "bonjour":       { "enabled": false },
+      "acpx":          { "enabled": false },
+      "browser":       { "enabled": false },
+      "device-pair":   { "enabled": false },
+      "phone-control": { "enabled": false },
+      "talk-voice":    { "enabled": false }
+    }
+  }
+}
