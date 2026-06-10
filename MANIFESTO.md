@@ -41,26 +41,7 @@ Students learn to set objectives, deploy agents, monitor outputs in real-time vi
 
 ---
 
-### V. The Pedagogical Roadmap: Ten Deliverables
-
-The DermaArtIA engagement tasks the student with ten rigorous deliverables focused on aesthetics marketing and operations:
-
-| Task | Focus | Agent |
-|------|-------|-------|
-| Task 1 | Platform Verification — secure FastAPI gateway and agent onboarding | Henry |
-| Task 2 | Market Intelligence — 2026 Scottsdale medspa competitor pricing scans | Scout |
-| Task 3 | Competitor Analysis — local clinic comparison tables (Botox, fillers, Sculptra) | Scout |
-| Task 4 | Persona Development — client psychographics for boutique aesthetics | Henry + Writer |
-| Task 5 | Web Optimization — responsive layouts, mobile collapsible navigation, and site deployment | Coder |
-| Task 6 | Integrated Strategy — full-team 90-day aesthetics campaign and Direct Access positioning | All agents |
-| Task 7 | Content Assets — copywriting for Homepage, Distinction, and Consultation Suites | Writer |
-| Task 8 | Automated Ops — 24/7 cron-job health checks, pricing scans, and daily memos | Watcher |
-| Task 9 | Financing Integration — subtle promotion of Cherry and CareCredit options | Coder + Writer |
-| Task 10 | Retrospective — evaluation of agentic performance and future aesthetics operations | Henry |
-
----
-
-### VI. Conclusion: The Zero-Marginal Cost Agency
+### V. Conclusion: The Zero-Marginal Cost Agency
 
 By the conclusion of this curriculum, a single student will possess the capability to replace a traditional agency of 100 people with a "lean" organization of 100 intelligent bots running entirely on Google AI Studio. 
 
