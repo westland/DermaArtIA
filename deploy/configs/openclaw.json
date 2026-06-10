@@ -1,22 +1,11 @@
 {
   "env": {
-    "GEMINI_API_KEY": "YOUR_GEMINI_API_KEY",
-    "GOOGLE_API_KEY": "YOUR_GEMINI_API_KEY",
+    "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY",
     "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY",
     "DISCORD_WEBHOOK_URL": "http://127.0.0.1:8000/api/reports/submit"
   },
   "gateway": {
-    "mode": "local",
-    "http": {
-      "endpoints": {
-        "chatCompletions": {
-          "enabled": true
-        }
-      }
-    },
-    "auth": {
-      "mode": "none"
-    }
+    "mode": "local"
   },
   "acp": {
     "enabled": true,
@@ -31,28 +20,68 @@
   },
   "agents": {
     "defaults": {
-      "model": { "primary": "google/gemini-2.5-flash" },
-      "subagents": { "allowAgents": ["scout","writer","coder"], "maxSpawnDepth": 1 }
+      "model": {
+        "primary": "anthropic/claude-haiku-4-5-20251001"
+      },
+      "subagents": {
+        "allowAgents": [
+          "scout",
+          "writer",
+          "coder"
+        ],
+        "maxSpawnDepth": 1
+      },
+      "llm": {
+        "idleTimeoutSeconds": 600
+      },
+      "memorySearch": {
+        "provider": "gemini",
+        "fallback": "none",
+        "remote": {
+          "batch": {
+            "enabled": false
+          }
+        }
+      }
     },
     "list": [
-      { "id": "henry",   "name": "Henry",   "default": true,
-        "workspace": "~/.openclaw/workspace-henry",   "agentDir": "~/.openclaw/agents/henry",   "model": "google/gemini-2.5-flash" },
-      { "id": "coder",   "name": "Coder",
-        "workspace": "~/.openclaw/workspace-coder",   "agentDir": "~/.openclaw/agents/coder",   "model": "google/gemini-2.5-flash" },
-      { "id": "scout",   "name": "Scout",
-        "workspace": "~/.openclaw/workspace-scout",   "agentDir": "~/.openclaw/agents/scout",   "model": "google/gemini-2.5-flash" },
-      { "id": "writer",  "name": "Writer",
-        "workspace": "~/.openclaw/workspace-writer",  "agentDir": "~/.openclaw/agents/writer",  "model": "google/gemini-2.5-flash" },
-      { "id": "watcher", "name": "Watcher",
-        "workspace": "~/.openclaw/workspace-watcher", "agentDir": "~/.openclaw/agents/watcher", "model": "google/gemini-2.5-flash" }
-    ]
-  },
-  "models": {
-    "providers": {
-      "google": {
-        "timeoutSeconds": 300
+      {
+        "id": "henry",
+        "name": "Henry",
+        "default": true,
+        "workspace": "~/.openclaw/workspace-henry",
+        "agentDir": "~/.openclaw/agents/henry",
+        "model": "anthropic/claude-haiku-4-5-20251001"
+      },
+      {
+        "id": "coder",
+        "name": "Coder",
+        "workspace": "~/.openclaw/workspace-coder",
+        "agentDir": "~/.openclaw/agents/coder",
+        "model": "anthropic/claude-haiku-4-5-20251001"
+      },
+      {
+        "id": "scout",
+        "name": "Scout",
+        "workspace": "~/.openclaw/workspace-scout",
+        "agentDir": "~/.openclaw/agents/scout",
+        "model": "anthropic/claude-haiku-4-5-20251001"
+      },
+      {
+        "id": "writer",
+        "name": "Writer",
+        "workspace": "~/.openclaw/workspace-writer",
+        "agentDir": "~/.openclaw/agents/writer",
+        "model": "anthropic/claude-haiku-4-5-20251001"
+      },
+      {
+        "id": "watcher",
+        "name": "Watcher",
+        "workspace": "~/.openclaw/workspace-watcher",
+        "agentDir": "~/.openclaw/agents/watcher",
+        "model": "anthropic/claude-haiku-4-5-20251001"
       }
-    }
+    ]
   },
   "channels": {
     "telegram": {
@@ -67,23 +96,53 @@
     "level": "info",
     "file": "~/.openclaw/logs/openclaw.log"
   },
-  "cron": { "enabled": true },
-  "tools": {
-    "exec": { "security": "full", "ask": "off" },
-    "media": { "audio": { "enabled": false, "echoTranscript": true } },
-    "message": { "crossContext": { "allowAcrossProviders": true } }
+  "cron": {
+    "enabled": true
   },
-  "approvals": { "exec": { "enabled": false } },
+  "tools": {
+    "exec": {
+      "security": "full",
+      "ask": "off"
+    },
+    "media": {
+      "audio": {
+        "enabled": false
+      }
+    },
+    "message": {
+      "crossContext": {
+        "allowAcrossProviders": true
+      }
+    }
+  },
+  "approvals": {
+    "exec": {
+      "enabled": false
+    }
+  },
   "plugins": {
     "entries": {
-      "google":        { "enabled": true  },
-      "anthropic":     { "enabled": false },
-      "bonjour":       { "enabled": false },
-      "acpx":          { "enabled": false },
-      "browser":       { "enabled": false },
-      "device-pair":   { "enabled": false },
-      "phone-control": { "enabled": false },
-      "talk-voice":    { "enabled": false }
+      "anthropic": {
+        "enabled": true
+      },
+      "bonjour": {
+        "enabled": false
+      },
+      "acpx": {
+        "enabled": false
+      },
+      "browser": {
+        "enabled": false
+      },
+      "device-pair": {
+        "enabled": false
+      },
+      "phone-control": {
+        "enabled": false
+      },
+      "talk-voice": {
+        "enabled": false
+      }
     }
   }
 }

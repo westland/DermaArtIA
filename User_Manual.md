@@ -178,6 +178,29 @@ journalctl -u dermaart-portal -n 40 --no-pager
 su - clawuser -c "openclaw config validate"
 ```
 
+### Agent Memory Indexing (OpenAI 401 Unauthorized Error)
+If agents report that their memory search is paused or returns an OpenAI 401 error because of a missing or invalid OpenAI key, it is because OpenClaw defaults to OpenAI for vector embeddings. The system has been reconfigured to run memory search natively on Google Gemini:
+1. The `openclaw.json` configuration blocks are configured with `gemini` as the memory search provider, with Google Cloud's async batching disabled to run embeddings inline:
+   ```json
+   "memorySearch": {
+     "provider": "gemini",
+     "fallback": "none",
+     "remote": {
+       "batch": {
+         "enabled": false
+       }
+     }
+   }
+   ```
+2. To trigger a forced rebuild/reindexing of all agent memory databases on the server, run:
+   ```bash
+   su - clawuser -c "openclaw memory index --force"
+   ```
+3. To inspect status of agent memory:
+   ```bash
+   su - clawuser -c "openclaw memory status"
+   ```
+
 ---
 
 ## 11. Multimedia & Social Publishing
@@ -187,6 +210,11 @@ The DermaArtIA platform is equipped to generate, modify, and publish images and 
 ### Workspace File Management & Chat Attachments
 1. **Chat Attachments**: In the **Command Center**, click the paperclip icon in the message bar to select images or videos to upload. They are uploaded to `/api/media/upload?agent_id=henry` and stored in Henry's workspace.
 2. **Workspace Files Tab**: Go to the **Agent Roster** tab, select an agent (e.g. **Coder**), and click **Workspace Files**. You can drag-and-drop images/videos to upload them directly, view listed files, download them, or delete them.
+3. **Downloading Agent-Generated Media**: When an agent generates media (such as an image or video), the media is displayed directly in the portal chat. However, the file itself is saved on the server inside `/home/clawuser/.openclaw/media/tool-image-generation/`.
+   * To download the file to your computer, instruct Henry: 
+     > *"Henry, copy the picture of the two talking bananas to your workspace so I can download it."*
+   * Henry's `SOUL.md` directs him to execute a shell command (e.g., `cp /home/clawuser/.openclaw/media/tool-image-generation/image-xxx.jpg ./banana_talking.jpg`) to move it into his workspace folder (`/home/clawuser/.openclaw/workspace-henry/`).
+   * Once Henry completes the copy, navigate to the **Agent Roster** tab, click **Henry**, select **Workspace Files**, and you will see the file listed. Click the file name to download it directly to your local computer.
 
 ### Generative AI (Imagen & Veo) CLI Commands
 The agent system is configured with Google's image and video generation APIs:
@@ -207,4 +235,7 @@ The agent system is configured with Google's image and video generation APIs:
 Coder has access to two pre-packaged scripts inside the workspace:
 1. **`wordpress_update.py`**: Interacts with your WordPress site to upload media files and inject page/post HTML copy.
 2. **`instagram_post.py`**: Interacts with the Instagram Graph API to post media (via the public link returned by the WordPress script).
+
+---
+*Copyright © 2026 J. Christopher Westland, all rights reserved · v0.7*
 
