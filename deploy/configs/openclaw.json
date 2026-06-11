@@ -16,7 +16,7 @@
       "writer",
       "watcher"
     ],
-    "maxConcurrentSessions": 2
+    "maxConcurrentSessions": 5
   },
   "agents": {
     "defaults": {
@@ -27,7 +27,9 @@
         "allowAgents": [
           "scout",
           "writer",
-          "coder"
+          "coder",
+          "watcher",
+          "henry"
         ],
         "maxSpawnDepth": 1
       },
@@ -103,6 +105,9 @@
     "exec": {
       "security": "full",
       "ask": "off"
+    },
+    "elevated": {
+      "enabled": true
     },
     "media": {
       "audio": {

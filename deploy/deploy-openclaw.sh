@@ -350,12 +350,12 @@ cat > "${OPENCLAW_DIR}/openclaw.json" << CONFIGEOF
       "writer",
       "watcher"
     ],
-    "maxConcurrentSessions": 2
+    "maxConcurrentSessions": 5
   },
   "agents": {
     "defaults": {
       "model": { "primary": "google/gemini-2.5-flash" },
-      "subagents": { "allowAgents": ["scout","writer","coder"], "maxSpawnDepth": 1 },
+      "subagents": { "allowAgents": ["scout","writer","coder","watcher","henry"], "maxSpawnDepth": 1 },
       "memorySearch": {
         "provider": "gemini",
         "fallback": "none",
@@ -402,6 +402,7 @@ cat > "${OPENCLAW_DIR}/openclaw.json" << CONFIGEOF
   "cron": { "enabled": true },
   "tools": {
     "exec": { "security": "full", "ask": "off" },
+    "elevated": { "enabled": true },
     "media": { "audio": { "enabled": ${AUDIO_ENABLED}, "echoTranscript": true } },
     "message": { "crossContext": { "allowAcrossProviders": true } }
   },
