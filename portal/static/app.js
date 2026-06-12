@@ -405,7 +405,7 @@ async function loadAgentRoster() {
                 <div class="agent-card-desc">${desc}</div>
                 <div class="agent-card-meta">
                     <span>STATUS: ACTIVE</span>
-                    <span>REST ONLY</span>
+                    <span>REST API</span>
                 </div>
             `;
             
