@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 import shutil
+from typing import Optional, List
 
 app = FastAPI(title="Derma Art MedSpa Agent Portal")
 
@@ -62,8 +63,19 @@ class CommandRequest(BaseModel):
     agent_id: str
     prompt: str
 
+class EmbedFooter(BaseModel):
+    text: str
+
+class Embed(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    color: Optional[int] = None
+    footer: Optional[EmbedFooter] = None
+
 class ReportRequest(BaseModel):
-    content: str
+    content: Optional[str] = None
+    username: Optional[str] = None
+    embeds: Optional[List[Embed]] = None
 
 @app.get("/api/system")
 def get_system_status():
@@ -233,8 +245,13 @@ def get_reports():
 
 @app.post("/api/reports/submit")
 def submit_report(req: ReportRequest):
-    # Parse the text report sent from agent discord-post replacement script.
-    content = req.content.strip()
+    # Parse the text report sent from agent portal-post or legacy discord-post replacement script.
+    content = ""
+    if req.content:
+        content = req.content.strip()
+    elif req.embeds and len(req.embeds) > 0 and req.embeds[0].description:
+        content = req.embeds[0].description.strip()
+
     if not content:
         return {"status": "ignored"}
 

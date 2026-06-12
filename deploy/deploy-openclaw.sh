@@ -59,11 +59,11 @@ echo -e "${BOLD}  ClawInc Multi-Agent AI Company — v${VERSION} Installer${NC}"
 echo -e "  OOM fixes · Symlink repair · Cron jobs via jobs.json · Handshake timeout fix · Bonjour/mDNS disabled"
 echo -e "  Voice commands supported via OpenAI audio transcription"
 echo -e "  Deploys 5 autonomous AI agents (Henry, Coder, Scout, Writer, Watcher)"
-echo -e "  Controlled via Telegram · Reports posted to Discord\n"
+echo -e "  Controlled via Telegram · Reports posted to Web Portal\n"
 echo -e "${YELLOW}  Before continuing, make sure you have:${NC}"
 echo -e "  1. Your Anthropic API key   → console.anthropic.com (required)"
 echo -e "  2. Your OpenAI API key      → platform.openai.com (for voice commands)"
-echo -e "  3. Your Discord webhook URL → your Discord server → #reports channel"
+echo -e "  3. Your Portal Reports API URL (default: http://127.0.0.1:8000/api/reports/submit)"
 echo -e "  4. Five Telegram bot tokens → @BotFather on Telegram\n"
 if [[ -z "${NON_INTERACTIVE:-}" ]]; then
     echo -e "  Press ENTER to continue or Ctrl+C to exit."
@@ -116,21 +116,18 @@ if [[ -z "$OPENAI_API_KEY" && -z "${NON_INTERACTIVE:-}" ]]; then
 fi
 
 echo ""
-echo -e "${BOLD}── Discord Webhook URL ─────────────────────────────────────${NC}"
-echo -e "  All agent reports post here. To get your webhook URL:"
-echo -e "  1. Open Discord → your ClawInc server → #reports channel"
-echo -e "  2. Right-click #reports → Edit Channel → Integrations → Webhooks"
-echo -e "  3. Click 'New Webhook' → name it 'ClawInc Reports' → Copy Webhook URL"
-echo -e "  It looks like: https://discord.com/api/webhooks/123456/ABCDEF..."
-DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL:-}"
-if [[ -z "$DISCORD_WEBHOOK_URL" ]]; then
-    prompt "Paste your Discord webhook URL:"
-    read -r DISCORD_WEBHOOK_URL
+echo -e "${BOLD}── Portal Reports API URL ───────────────────────────────────${NC}"
+echo -e "  All agent reports post here. Default local path:"
+echo -e "  http://127.0.0.1:8000/api/reports/submit"
+PORTAL_REPORTS_URL="${PORTAL_REPORTS_URL:-}"
+if [[ -z "$PORTAL_REPORTS_URL" ]]; then
+    prompt "Paste your Portal Reports API URL (default: http://127.0.0.1:8000/api/reports/submit):"
+    read -r PORTAL_REPORTS_URL
 fi
-while [[ -z "$DISCORD_WEBHOOK_URL" ]]; do
-    prompt "Webhook URL cannot be empty. Paste your Discord webhook URL:"
-    read -r DISCORD_WEBHOOK_URL
-done
+if [[ -z "$PORTAL_REPORTS_URL" ]]; then
+    PORTAL_REPORTS_URL="http://127.0.0.1:8000/api/reports/submit"
+fi
+DISCORD_WEBHOOK_URL="${PORTAL_REPORTS_URL}"
 
 echo ""
 echo -e "${BOLD}── Telegram Bot Tokens ─────────────────────────────────────${NC}"
@@ -289,12 +286,12 @@ if [[ -d "${DEPLOY_DIR}/configs" ]]; then
     done
 fi
 
-# Substitute student's Discord webhook URL into all SOUL.md files
-log "Configuring Discord webhook in agent personalities..."
+# Substitute student's Portal Reports API URL into all SOUL.md files
+log "Configuring Portal Reports URL in agent personalities..."
 for AGENT in henry coder scout writer watcher; do
     SOUL="${OPENCLAW_DIR}/workspace-${AGENT}/SOUL.md"
     if [[ -f "$SOUL" ]]; then
-        sed -i "s|DISCORD_WEBHOOK_PLACEHOLDER|${DISCORD_WEBHOOK_URL}|g" "$SOUL"
+        sed -i "s|DISCORD_WEBHOOK_PLACEHOLDER|${PORTAL_REPORTS_URL}|g" "$SOUL"
     fi
 done
 
@@ -326,6 +323,7 @@ cat > "${OPENCLAW_DIR}/openclaw.json" << CONFIGEOF
     "GEMINI_API_KEY": "${GEMINI_API_KEY}",
     "GOOGLE_API_KEY": "${GEMINI_API_KEY}",
     "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+    "PORTAL_REPORTS_URL": "${PORTAL_REPORTS_URL}",
     "DISCORD_WEBHOOK_URL": "${DISCORD_WEBHOOK_URL}"
   },
   "gateway": {
@@ -954,7 +952,7 @@ echo -e "${GREEN}${BOLD}"
 echo "  ✓ OpenClaw gateway running"
 echo "  ✓ 5 agents configured: Henry, Coder, Scout, Writer, Watcher"
 echo "  ✓ Telegram bots connected"
-echo "  ✓ Discord webhook configured"
+echo "  ✓ Portal reports URL configured"
 echo "  ✓ Exec approvals disabled (agents can run code freely)"
 echo "  ✓ 6 cron jobs scheduled"
 echo -e "${NC}"

@@ -2,6 +2,7 @@
   "env": {
     "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY",
     "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY",
+    "PORTAL_REPORTS_URL": "http://127.0.0.1:8000/api/reports/submit",
     "DISCORD_WEBHOOK_URL": "http://127.0.0.1:8000/api/reports/submit"
   },
   "gateway": {
