@@ -187,7 +187,8 @@ def submit_command(req: CommandRequest):
     }
     
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "x-openclaw-session-key": f"portal-{req.agent_id}"
     }
     
     try:
