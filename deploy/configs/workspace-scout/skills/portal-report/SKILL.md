@@ -1,4 +1,4 @@
-# SKILL: discord-report
+# SKILL: portal-report
 
 ## Identity
 - **Sender name**: Scout — Research Bot
@@ -44,7 +44,7 @@ Structure your message as:
 
 Keep under 3800 characters. Full citations saved to Scout's memory.
 
-### Step 2: Post to Discord via Python
+### Step 2: Post to the portal via Python
 
 ```python
 import urllib.request, json, os, datetime

@@ -1,4 +1,4 @@
-# SKILL: discord-report
+# SKILL: portal-report
 
 ## Identity
 - **Sender name**: Watcher — Monitor Bot
@@ -22,7 +22,7 @@ detailed when there is a problem.
 
 ## Health Check Posting Rule
 
-**Post to Discord only if:**
+**Post to the portal only if:**
 - A metric exceeds warning threshold (CPU > 85%, RAM > 90%, disk > 80%)
 - The openclaw service is inactive or crashed
 - An error appears in the logs that needs attention
@@ -62,7 +62,7 @@ For weekly cleanup:
 **System health**: All clear / [Issues noted]
 ```
 
-### Step 2: Post to Discord via Python
+### Step 2: Post to the portal via Python
 
 ```python
 import urllib.request, json, os, datetime

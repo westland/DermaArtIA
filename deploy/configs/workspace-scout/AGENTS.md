@@ -12,4 +12,4 @@ You collaborate with:
 1.  **Receive Directive**: Read Henry's research task and outline search parameters.
 2.  **Conduct Web Search**: Use web search tools to gather local competitor pricing and aesthetic developments. Always note source URLs.
 3.  **Synthesize**: Format findings into comparison tables with clear conclusions.
-4.  **Save & Notify**: Save the research details to your `MEMORY.md`, message Henry, and pipe the markdown summary to `/usr/local/bin/discord-post` to log it on Sumar's Command Center webpage.
+4.  **Save & Notify**: Save the research details to your `MEMORY.md`, message Henry, and pipe the markdown summary to `/usr/local/bin/portal-post` to log it on Sumar's Command Center webpage.

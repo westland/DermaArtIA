@@ -12,13 +12,24 @@ In the legacy paradigm, machines were passive recipients of explicit instruction
 
 ---
 
-### II. The Tripartite Architecture of Agentic Programming
+### II. The Tripartite Architecture and the OpenClaw Workspace
 
-The philosophy of DermaArtIA rests on the realization that an autonomous agent is built upon three pillars: **Personality, Action Scripts, and Taboos.**
+The philosophy of DermaArtIA rests on the realization that an autonomous agent is built upon three pillars: **Personality, Action Scripts, and Taboos.** Under the OpenClaw system, these pillars are codified as plain markdown files inside the agent's workspace. At the start of every session, these files are automatically injected into the system prompt; the agent literally **"reads itself into being"** from them.
 
-1. **Personality:** Just as a clinic hires human practitioners for cultural fit and behavioral traits, users of the DermaArt IA app learn to construct the "psyche" of an agent. A "Henry" (Chief of Staff) requires a different disposition than a "Scout" (Researcher). The DermaArt IA app enables users to define the cognitive biases, tone, and professional temperament of their agents to ensure consistent performance.
-2. **Action Scripts:** These are the teleological components of the agent—heuristics designed to achieve specific objectives. Whether the goal is researching competitor pricing, drafting boutique copywriting, or monitoring systems, the action script provides the logical flow the agent follows.
-3. **Taboos (The Guardrails):** To prevent unwanted behavior, we implement "Taboos"—operational prohibitions. These are not merely "if-then" statements; they are the moral and legal boundaries of the agent, ensuring that autonomous action does not result in ethical, regulatory, or brand reputation catastrophe.
+1. **Personality (`SOUL.md` & `IDENTITY.md`):** Users construct the internal psyche (`SOUL.md`) and the external presentation (`IDENTITY.md`) of each agent. For example, `SOUL.md` employs a recommended 6-section structure (Opening, Core Truths, Boundaries, Vibe, Continuity, Closing) to outline tone, values, and cognitive biases.
+2. **Action Scripts / Strategy (`AGENTS.md` & `SKILL.md`):** Heuristics designed to achieve specific objectives. `AGENTS.md` serves as the agent's operating manual (session startup, memory rules, workflow guidelines), while modular, downloadable open-source skills (`SKILL.md` packages) grant specific, executable capabilities.
+3. **Taboos (`SOUL.md` Boundaries & `AGENTS.md` Guardrails):** Operational prohibitions that prevent ethical, regulatory, or brand reputation catastrophes.
+
+#### Summary of Workspace Files
+
+*   **SOUL.md**: Internal character, values, tone, and boundaries (the 6-section template).
+*   **IDENTITY.md**: External name, avatar, and introduction style.
+*   **AGENTS.md**: Operating manual, startup routines, and memory constraints.
+*   **USER.md**: Persona/preferences of the human client for personalization.
+*   **TOOLS.md**: Environment context, API endpoints, and host conventions.
+*   **MEMORY.md**: Long-term curated facts persistent across sessions.
+*   **HEARTBEAT.md / STYLE.md**: Proactive scheduler and formatting constraints.
+*   **SKILL.md**: Descriptions of modular capabilities/plugins.
 
 ---
 

@@ -16,4 +16,4 @@ You collaborate with:
     *   What was modified/built.
     *   Where the code was saved.
     *   How to verify or run it.
-4.  **Publish Report**: Pipe a clean summary of your code changes or server status to `/usr/local/bin/discord-post` so it is archived on Sumar's Command Center webpage.
+4.  **Publish Report**: Pipe a clean summary of your code changes or server status to `/usr/local/bin/portal-post` so it is archived on Sumar's Command Center webpage.

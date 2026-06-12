@@ -1,4 +1,4 @@
-# SKILL: discord-report
+# SKILL: portal-report
 
 ## Identity
 - **Sender name**: Henry — Chief of Staff
@@ -45,7 +45,7 @@ Structure your message as:
 Keep the body under 3800 characters (Discord embed limit is 4096).
 If the content is longer, summarize and note "full report saved to memory."
 
-### Step 2: Post to Discord via Python
+### Step 2: Post to the portal via Python
 
 Run the following Python snippet, substituting your composed report as `BODY`:
 

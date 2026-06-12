@@ -404,7 +404,8 @@ cat > "${OPENCLAW_DIR}/openclaw.json" << CONFIGEOF
     "exec": { "security": "full", "ask": "off" },
     "elevated": { "enabled": true },
     "media": { "audio": { "enabled": ${AUDIO_ENABLED}, "echoTranscript": true } },
-    "message": { "crossContext": { "allowAcrossProviders": true } }
+    "message": { "crossContext": { "allowAcrossProviders": true } },
+    "links": { "enabled": false }
   },
   "approvals": { "exec": { "enabled": false } },
   "plugins": {
@@ -478,8 +479,8 @@ fi
 chmod +x /usr/local/bin/fix-openclaw-symlinks.sh
 log "Symlink repair script installed at /usr/local/bin/fix-openclaw-symlinks.sh"
 
-# Install discord-post helper script for agents to post to Discord webhook
-cat > /usr/local/bin/discord-post << 'DISCORDPOSTEOF'
+# Install portal-post helper script for agents to post to Reports & Memos portal
+cat > /usr/local/bin/portal-post << 'PORTALPOSTEOF'
 #!/usr/bin/env python3
 import sys, json, urllib.request
 msg = sys.stdin.read().strip()
@@ -494,23 +495,24 @@ try:
     urllib.request.urlopen(req, timeout=5)
 except Exception as e:
     sys.stderr.write(f"Failed to submit report locally: {e}\n")
-DISCORDPOSTEOF
-chmod +x /usr/local/bin/discord-post
-log "Discord-post script installed at /usr/local/bin/discord-post"
+PORTALPOSTEOF
+chmod +x /usr/local/bin/portal-post
+ln -sf /usr/local/bin/portal-post /usr/local/bin/discord-post
+log "Portal-post script installed at /usr/local/bin/portal-post (discord-post symlinked)"
 
-# Install discord-report skill for all agents
-DISCORD_SKILL='# Discord Report Skill
+# Install portal-report skill for all agents
+PORTAL_SKILL='# Portal Report Skill
 
-Post a message to the ClawInc #reports Discord channel.
+Post a message to the Portal Reports & Memos screen.
 
 ## Method
 
-Pipe your message to /usr/local/bin/discord-post:
+Pipe your message to /usr/local/bin/portal-post:
 
 ```bash
-cat << DISCORD_EOF | /usr/local/bin/discord-post
+cat << PORTAL_EOF | /usr/local/bin/portal-post
 Your message content here...
-DISCORD_EOF
+PORTAL_EOF
 ```
 
 Long messages (>2000 chars) are split automatically.
@@ -522,9 +524,10 @@ Always use the pipe-to-script method above.
 '
 for AGENT in henry coder scout writer watcher; do
     mkdir -p "${OPENCLAW_DIR}/workspace-${AGENT}/skills"
-    echo "$DISCORD_SKILL" > "${OPENCLAW_DIR}/workspace-${AGENT}/skills/discord-report.md"
+    echo "$PORTAL_SKILL" > "${OPENCLAW_DIR}/workspace-${AGENT}/skills/portal-report.md"
+    rm -f "${OPENCLAW_DIR}/workspace-${AGENT}/skills/portal-report.md"
 done
-log "Discord-report skill installed for all agents"
+log "Portal-report skill installed for all agents"
 
 header "Phase 6b: Configuring Systemd Temp Directories"
 
@@ -859,7 +862,7 @@ else
       "schedule": { "kind": "cron", "expr": "*/5 * * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your health-check skill now. Check system resources (CPU, RAM, disk, swap), verify the OpenClaw gateway is running, and review recent error logs. If any metrics exceed warning thresholds, post an alert to Discord using your discord-report skill. Otherwise log the check to your workspace."
+        "message": "Run your health-check skill now. Check system resources (CPU, RAM, disk, swap), verify the OpenClaw gateway is running, and review recent error logs. If any metrics exceed warning thresholds, post an alert to the portal using your portal-report skill. Otherwise log the check quietly to your workspace."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -874,7 +877,7 @@ else
       "schedule": { "kind": "cron", "expr": "0 * * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your session-cleanup skill now. Archive old sessions, clean up temporary files, and ensure disk usage stays healthy."
+        "message": "Run your session-cleanup skill now. Archive old sessions, clean up temporary files, and ensure disk usage stays healthy. IMPORTANT: Do not call the update_goal tool as this is an automated system task."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -889,7 +892,7 @@ else
       "schedule": { "kind": "cron", "expr": "0 8 * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your news-digest skill. Search for the latest trending topics in AI, marketing analytics, and technology from the last 24 hours. Write a structured briefing with key findings, notable trends, and actionable insights. Save the briefing to your memory. Then post a signed summary to Discord using your discord-report skill."
+        "message": "Run your news-digest skill. Search for the latest trending topics in aesthetics, medspa marketing, local Scottsdale competitor medspas (pricing for Botox, fillers, Sculptra), patient feedback, and updates on Cherry or CareCredit financing plans. Write a structured briefing with comparison tables and key competitive findings. Save the briefing to your memory. Then post a signed summary to the portal using your portal-report skill."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -904,7 +907,7 @@ else
       "schedule": { "kind": "cron", "expr": "0 9 * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your write-memo skill. Search Scout memory for today's research briefing. Synthesize into a polished executive memo with sections: Top Stories, Trend Analysis, Action Items, Market Watch. Save to your memory. Post to Discord using your discord-report skill."
+        "message": "Run your write-memo skill. Search Scout's memory for today's competitor and aesthetics research briefing. Synthesize it into a polished, high-end operational memo for Sumar Kasik, RN. Structure it with sections: Competitor Price Shifts, Aesthetic Market Opportunities, Proposed Homepage Copy adjustments, and Social Media/Outreach Ideas. Save to memory. Post the memo using your portal-report skill."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -919,7 +922,7 @@ else
       "schedule": { "kind": "cron", "expr": "0 23 * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your rnd-meeting skill. Review today's memo from Writer, research from Scout, and any code from Coder. Identify opportunities and strategic improvements. Delegate follow-up tasks. Post a summary to Discord using your discord-report skill."
+        "message": "Run your rnd-meeting skill. Review today's memo from Writer, competitor research from Scout, and coding deliverables from Coder. Analyze gaps in Derma Art's branding, site responsiveness, or patient outreach. Formulate strategic recommendations for Sumar Kasik, RN. Post the retrospective summary using your portal-report skill. IMPORTANT: Do not call the update_goal tool as this is an automated system task."
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -962,7 +965,7 @@ echo ""
 echo -e "${BOLD}  Next steps:${NC}"
 echo -e "  1. Open Telegram and search for your Henry bot"
 echo -e "  2. Send a message — Henry will respond within seconds"
-echo -e "  3. Check your Discord #reports channel for the response"
+echo -e "  3. Check your Portal Reports & Memos screen for the response"
 echo ""
 echo -e "${BOLD}  Useful commands:${NC}"
 echo -e "  systemctl status openclaw              # Check gateway status"

@@ -3,7 +3,7 @@
 **A deployable five-agent autonomous AI company for marketing analytics, research, and automation in the aesthetics sector.**  
 *Copyright © 2026 J. Christopher Westland, all rights reserved*
 
-[![Release](https://img.shields.io/badge/release-v1.0-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v1.0)
+[![Release](https://img.shields.io/badge/release-v1.50-brightgreen)](https://github.com/westland/DermaArtIA/releases/tag/v1.50)
 [![OpenClaw](https://img.shields.io/badge/OpenClaw-2026.4.26-blue)](https://openclaw.dev)
 [![Platform](https://img.shields.io/badge/platform-Ubuntu%2024.04-orange)](https://ubuntu.com)
 [![Interface](https://img.shields.io/badge/interface-FastAPI_Web_Portal-purple)](https://fastapi.tiangolo.com)
@@ -32,6 +32,24 @@ The five agents are:
 | **Scout** | Gemini 2.5 Flash | Research Analyst — competitor pricing scans and market research |
 | **Writer** | Gemini 2.5 Flash | Content Creator — copywriting, distinction blurbs, and memos |
 | **Watcher** | Gemini 2.5 Flash | System Monitor — health checks, cleanup, and status logs |
+
+### How the Agents Think & Operate: OpenClaw Workspaces
+
+In the OpenClaw framework, agents do not run on static, pre-programmed code instructions. Instead, they **"read themselves into being"** at the start of every session. Each agent's workspace (located under `deploy/configs/workspace-[agent-name]/`) contains a set of plain Markdown (`.md`) files that are dynamically injected into the system prompt.
+
+Here is a summary of the workspace files and modular skills:
+
+| Workspace File | Function | Details & Structure |
+| :--- | :--- | :--- |
+| **SOUL.md** | Core Identity | Internal personality, principles, communication tone, and behavioral boundaries (6-section format: *Opening, Core Truths, Boundaries, Vibe, Continuity, Closing*). |
+| **IDENTITY.md** | Presentation | External presentation details (name, emoji, avatar description). |
+| **AGENTS.md** | Strategy | Operations manual including startup actions, memory management, and tool use rules. |
+| **USER.md** | Context | Profile info, preferences, and details about the human operator. |
+| **TOOLS.md** | Context | Functional environmental details (API hosts, ports, integrations). |
+| **MEMORY.md** | Context | Curated facts and context saved across sessions. |
+| **HEARTBEAT.md** | Execution | Trigger guidelines for scheduled/proactive runs. |
+| **STYLE.md** | Output | Formatting rules and display preferences. |
+| **SKILL.md** | Capabilities | Found inside modular, downloadable open-source skill plugins (`workspace-[agent-name]/skills/`). Contains the definition and schema for specific tools. |
 
 ---
 

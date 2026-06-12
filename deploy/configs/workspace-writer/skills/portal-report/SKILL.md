@@ -1,4 +1,4 @@
-# SKILL: discord-report
+# SKILL: portal-report
 
 ## Identity
 - **Sender name**: Writer — Content Bot
@@ -46,7 +46,7 @@ For Discord, produce a clean, readable version of your document:
 Keep under 3800 characters. If the full document is longer, post
 an executive summary and note: "Full document saved to Writer's memory."
 
-### Step 2: Post to Discord via Python
+### Step 2: Post to the portal via Python
 
 ```python
 import urllib.request, json, os, datetime

@@ -37,7 +37,7 @@ Do NOT keep retrying in a loop. Two attempts maximum.
 
 ## Example
 
-User: "tell coder to write hello world and post to Discord"
+User: "tell coder to write hello world and post to the portal"
 
 1. Call `sessions_spawn(agentId="coder", task="Write a hello-world Python program. Post the code to the #reports Discord channel using the DISCORD_WEBHOOK_URL env var.")`
 2. If it fails, wait 20s and try once more

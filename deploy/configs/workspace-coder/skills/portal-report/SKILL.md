@@ -1,4 +1,4 @@
-# SKILL: discord-report
+# SKILL: portal-report
 
 ## Identity
 - **Sender name**: Coder — Dev Agent
@@ -46,7 +46,7 @@ Structure your message as:
 Keep under 3800 characters. For long code outputs, summarize and save
 the full output to memory.
 
-### Step 2: Post to Discord via Python
+### Step 2: Post to the portal via Python
 
 ```python
 import urllib.request, json, os, datetime
