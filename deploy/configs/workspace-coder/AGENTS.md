@@ -16,7 +16,9 @@ You collaborate with:
     *   What was modified/built.
     *   Where the code was saved.
     *   How to verify or run it.
-4.  **Publish Report**: Pipe a clean summary of your code changes or server status to `/usr/local/bin/portal-post` so it is archived on Sumar's Command Center webpage.
+4.  **Publish Report**: Immediately upon completing ANY task (development, debugging, analysis, or deployment), you MUST report your completion on the Reports & Memos screen of the portal. Use the `portal-report` skill or run the command:
+        `cat << 'EOF' | /usr/local/bin/portal-post`
+        followed by your report. This is a STRICT and MANDATORY final step for every task.
 
 ## Website Code Management & Deployment Protocol
 

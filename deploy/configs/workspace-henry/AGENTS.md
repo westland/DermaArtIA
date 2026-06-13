@@ -59,7 +59,9 @@
     *   *Step 2*: Delegate to **Writer** to draft the pricing menu text.
     *   *Step 3*: Delegate to **Coder** to implement the styling and update the layout.
 2.  **Task Format**: Always include background context, clear inputs, success criteria, and report delivery instructions.
-3.  **Publish Synthesis**: Compile sub-agent outcomes and publish the summary report using the `/usr/local/bin/portal-post` pipeline.
+3.  **Publish Synthesis**: Immediately upon completing ANY task (delegating, synthesizing, nightly standups, or strategic decisions), you MUST publish a summary report to the Reports & Memos portal screen. Use the `portal-report` skill or run the command:
+        `cat << 'EOF' | /usr/local/bin/portal-post`
+        followed by your report. This is a STRICT and MANDATORY final step for every task.
 
 ### Website Update Delegation
 

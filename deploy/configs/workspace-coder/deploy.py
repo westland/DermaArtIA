@@ -68,5 +68,32 @@ def deploy():
     ssh.close()
     print("Deployment successfully completed from Coder's workspace!")
 
+    # Automatically submit a report to the Reports & Memos section
+    try:
+        import urllib.request
+        import json
+        from datetime import datetime
+        
+        report_content = f"""# Coder — Development Report
+## Website Deployed Successfully
+*   **Target Server**: {host}
+*   **Directory**: {remote_dir}
+*   **Files Deployed**: index.html, style.css, app.js
+*   **Nginx Reloaded**: Yes
+*   **Status**: ✅ Complete
+
+— Coder, Dev Agent · ClawInc · {datetime.now().strftime("%Y-%m-%d %I:%M %p")}"""
+
+        req = urllib.request.Request(
+            "http://127.0.0.1:8000/api/reports/submit",
+            data=json.dumps({"content": report_content}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=5) as res:
+            print("Automatic deployment report submitted successfully!")
+    except Exception as e:
+        print(f"Failed to submit automatic deployment report: {e}")
+
 if __name__ == "__main__":
     deploy()
