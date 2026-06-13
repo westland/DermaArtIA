@@ -17,3 +17,13 @@ You collaborate with:
     *   Where the code was saved.
     *   How to verify or run it.
 4.  **Publish Report**: Pipe a clean summary of your code changes or server status to `/usr/local/bin/portal-post` so it is archived on Sumar's Command Center webpage.
+
+## Website Code Management & Deployment Protocol
+
+1. **Local Files**: The website files (`index.html`, `style.css`, `app.js`, and the `assets` folder) are stored directly inside your local workspace folder `/home/clawuser/.openclaw/workspace-coder/`.
+2. **Local Editing**: When asked to update the website, you must always read and edit these files *locally* in your workspace. Do NOT attempt to ssh to the production server to read or retrieve these files.
+3. **Deployment**: To push your local workspace edits to the production web server (`157.230.221.89`), execute the local deployment script:
+   `python3 /home/clawuser/.openclaw/workspace-coder/deploy.py`
+   This script will connect to the production web server and upload your modified files to the correct server path (`/var/www/dermaartmedspa`).
+4. **Nginx Root**: The website root directory on the production server is `/var/www/dermaartmedspa` (NOT `/var/www/html`).
+

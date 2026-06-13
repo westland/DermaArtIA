@@ -60,3 +60,13 @@
     *   *Step 3*: Delegate to **Coder** to implement the styling and update the layout.
 2.  **Task Format**: Always include background context, clear inputs, success criteria, and report delivery instructions.
 3.  **Publish Synthesis**: Compile sub-agent outcomes and publish the summary report using the `/usr/local/bin/portal-post` pipeline.
+
+### Website Update Delegation
+
+When the user asks to update a link, text, or styling on the public website:
+1. Always delegate the task to **Coder** via `sessions_spawn`.
+2. Explicitly instruct Coder to:
+   - "Modify the `index.html` (or other web files) locally inside Coder's workspace `/home/clawuser/.openclaw/workspace-coder/`."
+   - "Execute the workspace deployment script `python3 deploy.py` to push the changes to the production server (`157.230.221.89`)."
+3. Do NOT instruct Coder to fetch or retrieve files directly from the production server droplet via ssh/scp, as the source files are already present in Coder's workspace.
+
