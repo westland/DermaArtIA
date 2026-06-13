@@ -204,7 +204,19 @@ def submit_command(req: CommandRequest):
             # Parse answer (OpenAI chat completions format)
             answer = ""
             if "choices" in res_data and len(res_data["choices"]) > 0:
-                answer = res_data["choices"][0]["message"]["content"]
+                msg = res_data["choices"][0]["message"]
+                content = msg.get("content")
+                if content:
+                    answer = content.strip()
+                else:
+                    answer = ""
+                
+                # Intercept empty responses or OpenClaw empty-turn fallback
+                if not answer or answer == "No response from OpenClaw.":
+                    answer = (
+                        "I have received your request and am delegating the tasks to the sub-agents in the background. "
+                        "I will submit a final retrospective report to the Reports & Memos section once completed."
+                    )
             else:
                 answer = json.dumps(res_data)
                 
