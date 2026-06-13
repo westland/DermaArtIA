@@ -687,8 +687,9 @@ async function loadReports() {
             const item = document.createElement("div");
             item.className = `report-item ${rep.id === selectedReportId ? "active" : ""}`;
             
-            const dateStr = new Date(rep.created_at).toLocaleDateString();
-            const timeStr = new Date(rep.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const cleanDate = new Date(rep.created_at.replace(" ", "T") + "Z");
+            const dateStr = cleanDate.toLocaleDateString();
+            const timeStr = cleanDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
             item.innerHTML = `
                 <div class="report-item-title">${escapeHTML(rep.title)}</div>
@@ -726,7 +727,8 @@ function renderReportViewer(rep) {
     
     titleEl.innerText = rep.title;
     
-    const dateStr = new Date(rep.created_at).toLocaleString();
+    const cleanDate = new Date(rep.created_at.replace(" ", "T") + "Z");
+    const dateStr = cleanDate.toLocaleString();
     metaEl.innerHTML = `Compiled by <code class="text-cyan">${rep.agent_id}</code> on <span>${dateStr}</span>`;
     
     // Parse content using marked
