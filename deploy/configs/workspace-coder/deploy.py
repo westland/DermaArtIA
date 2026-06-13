@@ -25,7 +25,7 @@ def deploy():
     username = "root"
     password = "#1DermaArts"
     
-    local_base = "/home/clawuser/.openclaw/workspace-coder"
+    local_base = os.path.dirname(os.path.abspath(__file__))
     remote_dir = "/var/www/dermaartmedspa"
     
     print(f"Connecting to {host}:{port} via SSH as {username}...")
