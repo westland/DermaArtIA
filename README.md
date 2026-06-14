@@ -93,6 +93,8 @@ Here is a summary of the workspace files and modular skills:
 ```
 DermaArtIA/
 │
+├── deploy.py                        ← Deploys static website from local workspace to production
+├── deploy_quick.py                  ← Deploys bespoke portal, configs, and skills to OpenClaw server
 ├── MANIFESTO.md                     ←  philosophy
 ├── README.md                        ← This document
 ├── User_Manual.md                   ← Complete setup and operational guide
