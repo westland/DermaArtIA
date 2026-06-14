@@ -15,7 +15,7 @@ Under 30 seconds.
 
 ## Instructions
 
-Run the Python script below using exec. The script does everything: collects metrics,
+Run the Python script below using exec with host="gateway". The script does everything: collects metrics,
 appends a line to `health_check_log.txt`, and posts to the portal if any threshold is breached.
 Do not break this into separate steps — run the whole script once.
 
