@@ -1,12 +1,23 @@
 {
   "env": {
-    "ANTHROPIC_API_KEY": "YOUR_ANTHROPIC_API_KEY",
+    "GEMINI_API_KEY": "YOUR_GEMINI_API_KEY",
+    "GOOGLE_API_KEY": "YOUR_GOOGLE_API_KEY",
     "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY",
     "PORTAL_REPORTS_URL": "http://127.0.0.1:8000/api/reports/submit",
     "DISCORD_WEBHOOK_URL": "http://127.0.0.1:8000/api/reports/submit"
   },
   "gateway": {
-    "mode": "local"
+    "mode": "local",
+    "http": {
+      "endpoints": {
+        "chatCompletions": {
+          "enabled": true
+        }
+      }
+    },
+    "auth": {
+      "mode": "none"
+    }
   },
   "session": {
     "writeLock": {
@@ -27,8 +38,9 @@
   },
   "agents": {
     "defaults": {
+      "timeoutSeconds": 300,
       "model": {
-        "primary": "anthropic/claude-haiku-4-5-20251001"
+        "primary": "google/gemini-2.5-flash"
       },
       "subagents": {
         "allowAgents": [
@@ -39,9 +51,6 @@
           "henry"
         ],
         "maxSpawnDepth": 1
-      },
-      "llm": {
-        "idleTimeoutSeconds": 600
       },
       "memorySearch": {
         "provider": "gemini",
@@ -60,43 +69,46 @@
         "default": true,
         "workspace": "~/.openclaw/workspace-henry",
         "agentDir": "~/.openclaw/agents/henry",
-        "model": "anthropic/claude-haiku-4-5-20251001"
+        "model": "google/gemini-2.5-flash"
       },
       {
         "id": "coder",
         "name": "Coder",
         "workspace": "~/.openclaw/workspace-coder",
         "agentDir": "~/.openclaw/agents/coder",
-        "model": "anthropic/claude-haiku-4-5-20251001"
+        "model": "google/gemini-2.5-flash"
       },
       {
         "id": "scout",
         "name": "Scout",
         "workspace": "~/.openclaw/workspace-scout",
         "agentDir": "~/.openclaw/agents/scout",
-        "model": "anthropic/claude-haiku-4-5-20251001"
+        "model": "google/gemini-2.5-flash"
       },
       {
         "id": "writer",
         "name": "Writer",
         "workspace": "~/.openclaw/workspace-writer",
         "agentDir": "~/.openclaw/agents/writer",
-        "model": "anthropic/claude-haiku-4-5-20251001"
+        "model": "google/gemini-2.5-flash"
       },
       {
         "id": "watcher",
         "name": "Watcher",
         "workspace": "~/.openclaw/workspace-watcher",
         "agentDir": "~/.openclaw/agents/watcher",
-        "model": "anthropic/claude-haiku-4-5-20251001"
+        "model": "google/gemini-2.5-flash"
       }
     ]
   },
-  "channels": {
-    "telegram": {
-      "enabled": false
+  "models": {
+    "providers": {
+      "google": {
+        "timeoutSeconds": 300
+      }
     }
   },
+  "channels": {},
   "bindings": [],
   "memory": {
     "backend": "builtin"
@@ -118,7 +130,8 @@
     },
     "media": {
       "audio": {
-        "enabled": false
+        "enabled": true,
+        "echoTranscript": true
       }
     },
     "message": {
@@ -134,8 +147,11 @@
   },
   "plugins": {
     "entries": {
-      "anthropic": {
+      "google": {
         "enabled": true
+      },
+      "anthropic": {
+        "enabled": false
       },
       "bonjour": {
         "enabled": false

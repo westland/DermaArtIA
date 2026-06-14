@@ -1,3 +1,8 @@
+---
+name: portal-report
+description: Post a signed, formatted report to the Reports & Memos portal screen.
+---
+
 # SKILL: portal-report
 
 ## Identity

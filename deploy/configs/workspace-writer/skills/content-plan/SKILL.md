@@ -1,3 +1,8 @@
+---
+name: content-plan
+description: Create strategic content plans that align content production with business objectives.
+---
+
 # Skill: Content Plan
 
 ## Description

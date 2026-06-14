@@ -1,3 +1,8 @@
+---
+name: log-analyzer
+description: Analyze system and application logs to identify errors, warnings, patterns, and anomalies.
+---
+
 # SKILL — Log Analyzer
 
 ## Purpose

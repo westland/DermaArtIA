@@ -15,7 +15,6 @@
 # Have the following ready before you start:
 #   - Your Anthropic API key  (from console.anthropic.com)
 #   - Your Discord webhook URL (from your Discord server settings)
-#   - Your 5 Telegram bot tokens (from @BotFather on Telegram)
 # =============================================================================
 
 set -euo pipefail
@@ -59,12 +58,11 @@ echo -e "${BOLD}  ClawInc Multi-Agent AI Company — v${VERSION} Installer${NC}"
 echo -e "  OOM fixes · Symlink repair · Cron jobs via jobs.json · Handshake timeout fix · Bonjour/mDNS disabled"
 echo -e "  Voice commands supported via OpenAI audio transcription"
 echo -e "  Deploys 5 autonomous AI agents (Henry, Coder, Scout, Writer, Watcher)"
-echo -e "  Controlled via Telegram · Reports posted to Web Portal\n"
+echo -e "  Controlled via Web Portal / Command Center\n"
 echo -e "${YELLOW}  Before continuing, make sure you have:${NC}"
 echo -e "  1. Your Anthropic API key   → console.anthropic.com (required)"
 echo -e "  2. Your OpenAI API key      → platform.openai.com (for voice commands)"
-echo -e "  3. Your Portal Reports API URL (default: http://127.0.0.1:8000/api/reports/submit)"
-echo -e "  4. Five Telegram bot tokens → @BotFather on Telegram\n"
+echo -e "  3. Your Portal Reports API URL (default: http://127.0.0.1:8000/api/reports/submit)\n"
 if [[ -z "${NON_INTERACTIVE:-}" ]]; then
     echo -e "  Press ENTER to continue or Ctrl+C to exit."
     read -r
@@ -127,46 +125,6 @@ fi
 if [[ -z "$PORTAL_REPORTS_URL" ]]; then
     PORTAL_REPORTS_URL="http://127.0.0.1:8000/api/reports/submit"
 fi
-DISCORD_WEBHOOK_URL="${PORTAL_REPORTS_URL}"
-
-echo ""
-echo -e "${BOLD}── Telegram Bot Tokens ─────────────────────────────────────${NC}"
-echo -e "  You need 5 bots. To create them:"
-echo -e "  1. Open Telegram and search for @BotFather"
-echo -e "  2. Send /newbot and follow the prompts for each bot"
-echo -e "  3. Each token looks like: 8732631641:AAHu1OuUh8uRXqpZqH_6G77DMOwIAXVaRKU"
-echo ""
-
-TELEGRAM_TOKEN_HENRY="${TELEGRAM_TOKEN_HENRY:-dummy1}"
-if [[ -z "$TELEGRAM_TOKEN_HENRY" && -z "${NON_INTERACTIVE:-}" ]]; then
-    prompt "Henry bot token (Chief of Staff — your main command interface):"
-    read -r TELEGRAM_TOKEN_HENRY
-fi
-
-TELEGRAM_TOKEN_CODER="${TELEGRAM_TOKEN_CODER:-dummy2}"
-if [[ -z "$TELEGRAM_TOKEN_CODER" && -z "${NON_INTERACTIVE:-}" ]]; then
-    prompt "Coder bot token (Software Engineer):"
-    read -r TELEGRAM_TOKEN_CODER
-fi
-
-TELEGRAM_TOKEN_SCOUT="${TELEGRAM_TOKEN_SCOUT:-dummy3}"
-if [[ -z "$TELEGRAM_TOKEN_SCOUT" && -z "${NON_INTERACTIVE:-}" ]]; then
-    prompt "Scout bot token (Research Analyst):"
-    read -r TELEGRAM_TOKEN_SCOUT
-fi
-
-TELEGRAM_TOKEN_WRITER="${TELEGRAM_TOKEN_WRITER:-dummy4}"
-if [[ -z "$TELEGRAM_TOKEN_WRITER" && -z "${NON_INTERACTIVE:-}" ]]; then
-    prompt "Writer bot token (Content Creator):"
-    read -r TELEGRAM_TOKEN_WRITER
-fi
-
-TELEGRAM_TOKEN_WATCHER="${TELEGRAM_TOKEN_WATCHER:-dummy5}"
-if [[ -z "$TELEGRAM_TOKEN_WATCHER" && -z "${NON_INTERACTIVE:-}" ]]; then
-    prompt "Watcher bot token (System Monitor):"
-    read -r TELEGRAM_TOKEN_WATCHER
-fi
-
 # Generate a random gateway token
 GATEWAY_TOKEN=$(openssl rand -hex 24)
 
@@ -390,11 +348,7 @@ cat > "${OPENCLAW_DIR}/openclaw.json" << CONFIGEOF
       }
     }
   },
-  "channels": {
-    "telegram": {
-      "enabled": false
-    }
-  },
+  "channels": {},
   "bindings": [],
   "memory": {
     "backend": "builtin"
@@ -842,8 +796,7 @@ header "Phase 10: Setting Up Automated Schedule"
 #   sessionTarget: "isolated"  — without this the gateway crashes with
 #       TypeError: Cannot read properties of undefined (reading 'startsWith')
 #   delivery: {"mode":"none"}  — without this the gateway tries to deliver
-#       results to the last Telegram session and fails with
-#       "Delivering to Telegram requires target <chatId>"
+#       results to the last active session.
 
 CRON_DIR="${OPENCLAW_DIR}/cron"
 mkdir -p "${CRON_DIR}"
@@ -896,7 +849,8 @@ else
       "schedule": { "kind": "cron", "expr": "0 8 * * *" },
       "payload": {
         "kind": "agentTurn",
-        "message": "Run your news-digest skill. Search for the latest trending topics in aesthetics, medspa marketing, local Scottsdale competitor medspas (pricing for Botox, fillers, Sculptra), patient feedback, and updates on Cherry or CareCredit financing plans. Write a structured briefing with comparison tables and key competitive findings. Save the briefing to your memory. Then post a signed summary to the portal using your portal-report skill."
+        "message": "Run your news-digest skill. Search for the latest trending topics in aesthetics, medspa marketing, local Scottsdale competitor medspas (pricing for Botox, fillers, Sculptra), patient feedback, and updates on Cherry or CareCredit financing plans. Write a structured briefing with comparison tables and key competitive findings. Save the briefing to your memory. Then post a signed summary to the portal using your portal-report skill.",
+        "timeoutSeconds": 300
       },
       "enabled": true,
       "createdAtMs": 1745535600000,
@@ -919,7 +873,7 @@ else
     },
     {
       "id": "nightly-rnd-henry",
-      "name": "nightly-rnd",
+      "name": "Nightly R&D Session",
       "agentId": "henry",
       "sessionTarget": "isolated",
       "delivery": { "mode": "none" },
@@ -957,7 +911,6 @@ header "Installation Complete 🎉"
 echo -e "${GREEN}${BOLD}"
 echo "  ✓ OpenClaw gateway running"
 echo "  ✓ 5 agents configured: Henry, Coder, Scout, Writer, Watcher"
-echo "  ✓ Telegram bots connected"
 echo "  ✓ Portal reports URL configured"
 echo "  ✓ Exec approvals disabled (agents can run code freely)"
 echo "  ✓ 6 cron jobs scheduled"
@@ -967,9 +920,8 @@ echo -e "  Server:    ${SERVER_IP}"
 echo -e "  Dashboard: http://${SERVER_IP}:8050"
 echo ""
 echo -e "${BOLD}  Next steps:${NC}"
-echo -e "  1. Open Telegram and search for your Henry bot"
-echo -e "  2. Send a message — Henry will respond within seconds"
-echo -e "  3. Check your Portal Reports & Memos screen for the response"
+echo -e "  1. Open your Command Center (http://${SERVER_IP})"
+echo -e "  2. Submit a command to Henry via the UI"
 echo ""
 echo -e "${BOLD}  Useful commands:${NC}"
 echo -e "  systemctl status openclaw              # Check gateway status"

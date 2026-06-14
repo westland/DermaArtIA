@@ -1,3 +1,8 @@
+---
+name: debug-app
+description: Diagnose and fix bugs, errors, and issues in applications.
+---
+
 # SKILL: debug-app
 
 ## Description

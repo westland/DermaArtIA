@@ -1,3 +1,8 @@
+---
+name: session-cleanup
+description: Perform weekly maintenance to archive old sessions, clean temporary files, and recover disk space.
+---
+
 # SKILL — Session Cleanup
 
 ## Purpose

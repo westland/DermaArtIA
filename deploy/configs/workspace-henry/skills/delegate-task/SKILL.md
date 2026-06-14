@@ -1,3 +1,8 @@
+---
+name: delegate-task
+description: Delegate tasks to sub-agents with proper context, tracking, and follow-up.
+---
+
 # SKILL: delegate-task
 
 ## Purpose

@@ -12,7 +12,7 @@
 ## Technical Infrastructure
 
 *   **Server**: DigitalOcean Droplet (`174.138.46.163`), AMD / 2 vCPUs / 4 GB RAM / 80 GB Disk running Ubuntu 24.04.
-*   **Agent Runtime**: OpenClaw Gateway on port `18789` (local REST mode, Telegram disabled).
+*   **Agent Runtime**: OpenClaw Gateway on port `18789` (local REST mode).
 *   **Command Center Web Portal**: Serves the UI at `http://174.138.46.163` on port `80` (reverse proxied via Nginx) under Basic Auth (`sumar` / `#1DermaArt`).
 *   **Client Website**: Client-facing medspa website hosted at `http://157.230.221.89` (or local files in `SUMAR NEW` workspace, to be managed and deployed by Coder).
 

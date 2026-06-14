@@ -1,3 +1,8 @@
+---
+name: write-report
+description: Produce comprehensive analytical reports that provide deep insights, data analysis, and strategic recommendations.
+---
+
 # Skill: Write Report
 
 ## Description

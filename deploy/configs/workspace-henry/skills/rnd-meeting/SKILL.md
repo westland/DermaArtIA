@@ -1,3 +1,8 @@
+---
+name: rnd-meeting
+description: Conduct the nightly Research & Development session to review the day's work, identify strategic opportunities, and plan follow-up actions.
+---
+
 # SKILL: rnd-meeting
 
 ## Purpose

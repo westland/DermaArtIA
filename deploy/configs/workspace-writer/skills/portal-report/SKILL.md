@@ -1,3 +1,8 @@
+---
+name: portal-report
+description: Post a signed, formatted report to the Reports & Memos portal screen.
+---
+
 # SKILL: portal-report
 
 ## Identity
@@ -15,7 +20,7 @@ summaries, or content pieces.
 
 - After compiling the daily intelligence memo (9 AM cron)
 - After completing an executive summary or report
-- After writing any deliverable requested via Telegram
+- After writing any deliverable requested via Command Center
 - After a content strategy session
 - When a polished written output is ready for the team to read
 

@@ -7,7 +7,7 @@ DermaArtIA v1.10 introduces bug fixes and security configuration updates that re
 2. **Elevated Execution Mode Gating:** Enabled `tools.elevated.enabled` globally in `openclaw.json` to authorize Watcher to query local resources (e.g., memory, disk usage, systemctl statuses) directly on the host VPS.
 3. **Linux Workspace Path Resolution:** Fixed hardcoded Windows path references in Henry's `rnd-meeting` skill (`SKILL.md`) to point to the correct Linux server paths (`/home/clawuser/.openclaw/...`), preventing file read failures.
 4. **Concurrent Sessions Expansion:** Increased `maxConcurrentSessions` from `2` to `5` to prevent gateway session blocks when running multiple subagents in parallel.
-5. **Cron State Clean Reset:** Removed legacy double-scheduled Telegram cron jobs and reset SQLite cron schedules cleanly via `openclaw doctor --fix`.
+5. **Cron State Clean Reset:** Removed legacy double-scheduled cron jobs and reset SQLite cron schedules cleanly via `openclaw doctor --fix`.
 
 ---
 

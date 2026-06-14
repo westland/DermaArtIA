@@ -1,3 +1,8 @@
+---
+name: deploy-app
+description: Deploy applications to production on the server.
+---
+
 # SKILL: deploy-app
 
 ## Description

@@ -1,3 +1,8 @@
+---
+name: daily-standup
+description: Run the morning standup meeting to synchronize the team, identify blockers, and set daily priorities.
+---
+
 # SKILL: daily-standup
 
 ## Purpose
@@ -167,7 +172,7 @@ DECISIONS NEEDED
 - Delegate or re-delegate as needed
 - Communicate priorities clearly
 
-### 6. Post Summary to User via Telegram
+### 6. Post Summary to User via Command Center
 
 **Delivery Format**:
 

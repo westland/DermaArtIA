@@ -14,7 +14,7 @@
 
 ## What Is DermaArtIA?
 
-DermaArtIA is a multi-agent AI company running 24/7 on a secure cloud server, designed to handle MedSpa and aesthetics marketing operations. Instead of relying on Telegram and Discord, you interact with the agents through a **bespoke, secure Web Portal** featuring:
+DermaArtIA is a multi-agent AI company running 24/7 on a secure cloud server, designed to handle MedSpa and aesthetics marketing operations. You interact with the agents through a **bespoke, secure Web Portal** featuring:
 1. **Interactive Command Center**: Chat with Henry (Chief of Staff) using text or **voice dictation** via browser-native SpeechRecognition.
 2. **Mobile Collapsible Sidebar**: Fully responsive mobile/tablet layout with a slide-out drawer menu and stacked dashboards.
 3. **Automated Jobs Center**: Live scheduler displaying cron run history, last run statuses (e.g. `ok`, `error`), and a "Run Now" trigger button pulling directly from the active SQLite database.

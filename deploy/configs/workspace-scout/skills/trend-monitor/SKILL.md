@@ -1,3 +1,8 @@
+---
+name: trend-monitor
+description: Continuously monitor trending topics across multiple sources and alert on significant developments.
+---
+
 # Trend Monitor Skill
 
 ## Skill Overview

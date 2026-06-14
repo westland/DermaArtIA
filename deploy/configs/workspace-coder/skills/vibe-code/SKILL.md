@@ -1,3 +1,8 @@
+---
+name: vibe-code
+description: Build functional micro-applications from plain English descriptions.
+---
+
 # SKILL: vibe-code
 
 ## Description

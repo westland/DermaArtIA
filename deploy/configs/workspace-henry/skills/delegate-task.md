@@ -4,7 +4,7 @@ Delegate a task to another agent in this ClawInc system.
 
 ## How to delegate
 
-Use the **sessions_spawn** tool — NOT Telegram. Bots cannot message each other via Telegram.
+Use the **sessions_spawn** tool to delegate tasks.
 
 ```
 sessions_spawn(

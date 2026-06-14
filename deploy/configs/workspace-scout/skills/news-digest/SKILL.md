@@ -1,3 +1,8 @@
+---
+name: news-digest
+description: Compile a concise, prioritized news briefing from the past 24 hours focused on AI, marketing, and Scottsdale medspa competitors.
+---
+
 # News Digest Skill
 
 ## Skill Overview

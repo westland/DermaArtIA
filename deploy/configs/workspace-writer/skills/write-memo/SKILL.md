@@ -1,3 +1,8 @@
+---
+name: write-memo
+description: Write professional executive memos that synthesize information into clear, actionable insights.
+---
+
 # Skill: Write Memo
 
 ## Description

@@ -1,3 +1,8 @@
+---
+name: health-check
+description: Check that the ClawInc server and openclaw-gateway are healthy.
+---
+
 # SKILL — Health Check
 
 ## Purpose

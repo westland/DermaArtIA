@@ -1,3 +1,8 @@
+---
+name: web-research
+description: Conduct thorough, multi-source web research on any given topic and deliver structured findings with citations.
+---
+
 # Web Research Skill
 
 ## Skill Overview
