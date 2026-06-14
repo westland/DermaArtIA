@@ -15,6 +15,7 @@
 *   **Agent Runtime**: OpenClaw Gateway on port `18789` (local REST mode).
 *   **Command Center Web Portal**: Serves the UI at `http://174.138.46.163` on port `80` (reverse proxied via Nginx) under Basic Auth (`sumar` / `#1DermaArt`).
 *   **Client Website**: Client-facing medspa website hosted at `http://157.230.221.89` (or local files in `SUMAR NEW` workspace, to be managed and deployed by Coder).
+*   **Release Management**: Do not commit release installation markdown files (e.g., `RELEASE_v*_INSTALLATION.md`) directly to the repository file list (center list) to avoid clutter. Consolidate all release memos under the GitHub Releases sidebar header on the far right menu.
 
 ## Brand Guidelines & Checklist
 

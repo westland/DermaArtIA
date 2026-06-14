@@ -11,6 +11,7 @@
 *   **Client Website Location**: `/var/www/dermaartmedspa`
 *   **Web Server Configuration**: Nginx site block `/etc/nginx/sites-available/dermaartmedspa`
 *   **Local Repository Path**: `c:\Users\westl\Desktop\SUMAR NEW` (local workspace containing index.html, style.css, app.js, and assets).
+*   **Release Management**: Do not commit release installation markdown files (e.g., `RELEASE_v*_INSTALLATION.md`) directly to the repository file list (center list) to avoid clutter. Consolidate all release memos under the GitHub Releases sidebar header on the far right menu.
 
 ## Design Constraints Checklist
 
